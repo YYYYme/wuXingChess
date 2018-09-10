@@ -59,8 +59,12 @@ var skillt;
         }
         return false;
     }
-    //
+    //清空第一个点击保存点
     function chessClearFirstPoint() {
         firstPoint.x = 0;
         firstPoint.y = 0;
+    }
+    //判断点击点对应棋子
+    function chessJudgePoint() {
+
     }

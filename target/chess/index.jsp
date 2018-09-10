@@ -241,6 +241,8 @@
         }
         //判断是否第一次有效点击
         var id = e.target.id;
+        //判断点击处是否有棋子
+        var firstClass = chessJudgePoint(e.target);
         var point = chessGetPosition(id);
         if ( chessIsFirst(point)){
             chessPutFirstPoint(point);

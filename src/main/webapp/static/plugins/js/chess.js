@@ -66,5 +66,10 @@ var skillt;
     }
     //判断点击点对应棋子
     function chessJudgePoint(classList) {
-
+        for(var i = 0; i < classList.size; i++){
+            var cl = classList[i];
+            if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0") {
+                return cl;
+            }
+        }
     }

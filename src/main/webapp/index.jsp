@@ -243,6 +243,11 @@
         var id = e.target.id;
         //判断点击处是否有棋子
         var firstClass = chessJudgePoint(e.target.classList);
+        if (!firstClass){
+            if (myColor % 2 === 1){
+
+            }
+        }
         var point = chessGetPosition(id);
         if ( chessIsFirst(point)){
             chessPutFirstPoint(point);
