@@ -9,3 +9,5 @@ target
 .idea
 mavenChess.iml
 main.iml
+chess.iml
+*.iml
