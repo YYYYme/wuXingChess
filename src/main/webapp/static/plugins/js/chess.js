@@ -65,6 +65,6 @@ var skillt;
         firstPoint.y = 0;
     }
     //判断点击点对应棋子
-    function chessJudgePoint() {
+    function chessJudgePoint(classList) {
 
     }
