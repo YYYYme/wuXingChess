@@ -1,0 +1,10 @@
+.classpath
+.project
+.settings
+logs
+target
+/.settings
+/.classpath
+/.project
+.idea
+mavenChess.iml
