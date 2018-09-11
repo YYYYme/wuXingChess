@@ -13,7 +13,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint("/websocket")
 public class WebSocket {
-	{
+	//存放房间
+	private static List<RoomDTO> roomList = new ArrayList<>();
+	static {
 		RoomDTO roomDTO = new RoomDTO();
 		roomDTO.setName("1");
 		RoomDTO roomDTO2 = new RoomDTO();
@@ -23,8 +25,7 @@ public class WebSocket {
 	}
 	//静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	private static int onlineCount = 0;
-	//存放房间
-	private static List<RoomDTO> roomList = new ArrayList<>();
+
 
 	//concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
 	private static CopyOnWriteArraySet<WebSocket> webSocketSet = new CopyOnWriteArraySet<>();
@@ -90,7 +91,7 @@ public class WebSocket {
 	 * @param message
 	 * @throws IOException
 	 */
-	public void sendMessage(String message) throws IOException{
+	private void sendMessage(String message) throws IOException{
 		this.session.getBasicRemote().sendText(message);
 		//this.session.getAsyncRemote().sendText(message);
     }

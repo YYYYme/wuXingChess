@@ -170,6 +170,8 @@
 </body>
 
 <script type="text/javascript">
+    var desc = "<%=request.getParameter("desc")%>";
+    console.log(desc);
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
@@ -177,7 +179,7 @@
         init();
     }
     else {
-        alert('当前浏览器 Not support websocket')
+        alert('当前浏览器 Not support websocket');
     }
 
     //连接发生错误的回调方法
@@ -235,8 +237,8 @@
     }
 
     $('#chessBoard').click(function (e) {
-        console.log(e)
-        if(myStep % 2 != 1){
+        console.log(e);
+        if(myStep % 2 !== 1){
             return;
         }
         //判断是否第一次有效点击
