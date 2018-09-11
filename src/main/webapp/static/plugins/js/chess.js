@@ -6,6 +6,12 @@ var firstPoint={
 };
 //第一点
 var chessFirstClass;
+//第二次点
+var chessSecondPoint={
+    x: 0,
+    y: 0
+};
+var chessSecondClass;
 //是否释放技能
 var isSkill = 0;
 var skillj;
@@ -32,7 +38,10 @@ function chessIsFirst() {
 function chessPutFirstPoint(point) {
     firstPoint.x = point[0];
     firstPoint.y = point[1];
-    console.log(firstPoint);
+}
+function chessPutSecondPoint(point) {
+    chessSecondPoint.x = point[0];
+    chessSecondPoint.y = point[1];
 }
 //判断是否可以走这里
 function chessCanMove(point, chessClass, isSkill) {
@@ -48,6 +57,8 @@ function chessCanMove(point, chessClass, isSkill) {
                  var secondPointId = point[0] + "_" + point[1];
                  $("#" + firstPointId).removeClass(chessClass);
                  $("#" + secondPointId).addClass(chessClass);
+                 //发送信息
+
                  //初始化第一个有效点
                  chessClearFirstPoint();
              }
@@ -118,11 +129,25 @@ function chessPutSkillPoint(point, classList){
             if(chessJudgeMyChess(cl)){
                 return;
             } else {
-                //计算是否在舒服范围内
-
+                //计算是否在束缚范围内
+                if(chessCanShuFu(point)){
+                    //保存第二点
+                    chessPutSecondPoint(point);
+                } else {
+                    return;
+                }
             }
         }
     }
+}
+//计算是否在束缚范围内
+function chessCanShuFu(point) {
+    var xMove = Math.abs(parseInt(point[0]) - parseInt(firstPoint.x));
+    var yMove = Math.abs(parseInt(point[1]) - parseInt(firstPoint.y) );
+    if(xMove <= 1 && yMove <= 1){
+        return true;
+    }
+    return false;
 }
 //是否释放技能
 function chessIsSkill(){
