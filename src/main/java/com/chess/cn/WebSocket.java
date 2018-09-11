@@ -93,7 +93,7 @@ public class WebSocket {
 	public void sendMessage(String message) throws IOException{
 		this.session.getBasicRemote().sendText(message);
 		//this.session.getAsyncRemote().sendText(message);
-	}
+    }
 
 	public static synchronized int getOnlineCount() {
 		return onlineCount;
@@ -106,4 +106,12 @@ public class WebSocket {
 	public static synchronized void subOnlineCount() {
 		WebSocket.onlineCount--;
 	}
+
+    public static List<RoomDTO> getRoomList() {
+        return roomList;
+    }
+
+    public static void setRoomList(List<RoomDTO> roomList) {
+        WebSocket.roomList = roomList;
+    }
 }
