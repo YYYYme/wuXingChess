@@ -3,6 +3,8 @@ package com.chess.cn;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -11,8 +13,18 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint("/websocket")
 public class WebSocket {
+	{
+		RoomDTO roomDTO = new RoomDTO();
+		roomDTO.setName("1");
+		RoomDTO roomDTO2 = new RoomDTO();
+		roomDTO2.setName("2");
+		roomList.add(roomDTO);
+		roomList.add(roomDTO2);
+	}
 	//静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	private static int onlineCount = 0;
+	//存放房间
+	private static List<RoomDTO> roomList = new ArrayList<>();
 
 	//concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
 	private static CopyOnWriteArraySet<WebSocket> webSocketSet = new CopyOnWriteArraySet<>();
@@ -30,6 +42,7 @@ public class WebSocket {
 		webSocketSet.add(this);     //加入set中
 		addOnlineCount();           //在线数加1
 		System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+
 	}
 
 	/**

@@ -9,3 +9,6 @@ target
 .idea
 mavenChess.iml
 workspace.xml
+main.iml
+chess.iml
+*.iml
