@@ -1,3 +1,4 @@
+var chessMyRoom;
 var myStep = 0;
 var myColor = 0;
 var firstPoint={
@@ -149,7 +150,23 @@ function chessCanShuFu(point) {
     }
     return false;
 }
-//是否释放技能
+//是否可以释放技能,点我方棋子时控制按钮是否亮起
 function chessIsSkill(){
+
+}
+//技能释放按钮亮起
+function chessSkillLight() {
+
+}
+//技能释放按钮变暗
+function chessSkillDark() {
+
+}
+//点击查看是否可以完成,完成就发送信息
+function chessMeStop(){
+
+    //组装消息
+
+    //发送信息
 
 }

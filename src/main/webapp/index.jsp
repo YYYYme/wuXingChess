@@ -168,10 +168,14 @@
     </div>
 </div>
 <input type="button" id="chessIsSkill" value="释放技能" onclick="chessIsSkill()"/>
+<input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
 <script type="text/javascript">
     var desc = "<%=request.getParameter("desc")%>";
+    var roomName = "<%=request.getParameter("roomName")%>";
+    //记录房间名称
+    chessMyRoom = roomName;
     //1 红色
     myColor = desc;
     //红方先走
@@ -223,8 +227,7 @@
     }
 
     //发送消息
-    function send() {
-        var message = document.getElementById('text').value;
+    function send(message) {
         websocket.send(message);
     }
     //初始位置
