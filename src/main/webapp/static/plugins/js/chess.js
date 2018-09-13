@@ -58,7 +58,7 @@ function chessPutSecondPoint(point) {
 
 //判断是否可以走这里
 function chessCanMove(point, chessClass, isSkill) {
-    if (chessClass === "jin") {
+    if (chessClass === chessFirstClass) {
         //没放技能
         if (!isSkill) {
             //落点是否有我方棋子
@@ -88,8 +88,8 @@ function chessClearFirstPoint() {
 }
 //清空第二个点击保存点
 function chessClearSecondPoint() {
-    firstPoint.x = 0;
-    firstPoint.y = 0;
+    chessSecondPoint.x = 0;
+    chessSecondPoint.y = 0;
 }
 //判断点击点对应棋子
 function chessJudgePoint(classList) {
@@ -118,7 +118,7 @@ function chessJudgeBlack(cl) {
 }
 //判断点击是否是我方棋子
 function chessJudgeMyChess(cl) {
-    if (cl == "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
         if (myColor == 1){
             return true;
         }
@@ -172,7 +172,7 @@ function chessSkillLight() {
 
 //判断是否是红方
 function chessJudgeRed(cl) {
-    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu") {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
         return true;
     }
     return false;
@@ -180,7 +180,7 @@ function chessJudgeRed(cl) {
 
 //判断是否是黑方
 function chessJudgeBlack(cl) {
-    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0") {
+    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
         return true;
     }
     return false;
@@ -188,12 +188,12 @@ function chessJudgeBlack(cl) {
 
 //判断点击是class否是我方棋子
 function chessJudgeMyChess(cl) {
-    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu") {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
         if (myColor === 1) {
             return true;
         }
     } else {
-        if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0") {
+        if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
             if (myColor === 0) {
                 return true;
             }
@@ -280,17 +280,23 @@ function chessSkillDark() {
 }
 //点击查看是否可以完成,完成就发送信息
 function chessMeStop(){
-    //把棋子class添加到第二步位置,删除第一步位置
-    var firstPointId = firstPoint.x + "_" + firstPoint.y;
-    var secondPointId = chessSecondPoint.x + "_" + chessSecondPoint.y;
-    $("#" + firstPointId).removeClass(chessFirstClass);
-    $("#" + secondPointId).addClass(chessFirstClass);
-    //初始化第一个有效点
-    chessClearFirstPoint();
-    //初始化第二个有效点
-    chessClearSecondPoint();
-    //组装消息
+    //判断目标位置坐标（x,y）是否为（0,0），若为(0,0)且所选棋子不为'帅'，则需重选目标位置
+    if (chessSecondPoint.x==0 && chessSecondPoint.y==0 && chessFirstClass!="shuai" && chessFirstClass!="shuai0"){
+        alert("请选择目标位置");
+    }else {
+        //把棋子class添加到第二步位置,删除第一步位置
+        var firstPointId = firstPoint.x + "_" + firstPoint.y;
+        var secondPointId = chessSecondPoint.x + "_" + chessSecondPoint.y;
+        $("#" + firstPointId).removeClass(chessFirstClass);
+        $("#" + secondPointId).addClass(chessFirstClass);
+        //初始化第一个有效点
+        chessClearFirstPoint();
+        //初始化第二个有效点
+        chessClearSecondPoint();
+        //组装消息
 
-    //发送信息
+        //发送信息
+    }
+
 
 }
