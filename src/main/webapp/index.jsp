@@ -167,7 +167,7 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" onclick="chessIsSkill()"/>
+<input type="button" id="chessIsSkill" value="释放技能" onclick="chessFreeSkill()"/>
 <input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
@@ -261,6 +261,7 @@
                 //判断点击是否是我方棋子
                 if (chessJudgeMyChess(firstClass)){
                     chessFirstClass = firstClass;
+                    chessIsSkill();
                 } else {
                     return;
                 }

@@ -150,7 +150,7 @@ function chessCanShuFu(point) {
     }
     return false;
 }
-//是否可以释放技能,点我方棋子时控制按钮是否亮起
+//是否亮起释放技能,点我方棋子时控制按钮是否亮起
 function chessIsSkill(){
 
 }
