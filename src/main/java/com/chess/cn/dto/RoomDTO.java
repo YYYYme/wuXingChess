@@ -1,4 +1,4 @@
-package com.chess.cn;
+package com.chess.cn.dto;
 
 public class RoomDTO {
 

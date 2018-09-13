@@ -1,5 +1,9 @@
 package com.chess.cn;
 
+import com.alibaba.fastjson.JSON;
+import com.chess.cn.dto.ChessMessageDTO;
+import com.chess.cn.dto.RoomDTO;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -64,8 +68,12 @@ public class WebSocket {
 	@OnMessage
 	public void onMessage(String message, Session session) {
 		System.out.println("来自客户端的消息:" + message);
-		//群发消息
+		//json转dto
+        ChessMessageDTO chessMessageDTO = JSON.parseObject(message, ChessMessageDTO.class);
+        String chessRoom = chessMessageDTO.getChessRoom();
+        //群发消息
 		for(WebSocket item: webSocketSet){
+
 			try {
 				item.sendMessage(message);
 			} catch (IOException e) {

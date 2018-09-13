@@ -1,8 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8" %>
 <%@ page import="com.chess.cn.WebSocket" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.chess.cn.RoomDTO" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.chess.cn.dto.RoomDTO" %>
 <%
     request.setAttribute("roomList",WebSocket.getRoomList());
 
