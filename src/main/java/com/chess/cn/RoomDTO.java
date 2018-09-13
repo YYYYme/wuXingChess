@@ -32,8 +32,4 @@ public class RoomDTO {
         this.secondPlayer = secondPlayer;
     }
 
-    public static void main(String[] args) {
-        RoomDTO roomDTO = new RoomDTO();
-        roomDTO.setName("");
-    }
 }

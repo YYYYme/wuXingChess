@@ -110,7 +110,7 @@
         <span id="-1_0" class="squ-line"></span>
         <span id="0_0" class="squ-line">
                     <img alt="" class="diamond" src="./static/plugins/images/diamond.png">
-                </span>
+        </span>
         <span id="1_0" class="squ-line"></span>
         <span id="2_0" class="squ-line"></span>
         <span id="3_0" class="squ-line"></span>
@@ -167,9 +167,20 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
+<input type="button" id="chessIsSkill" value="释放技能" onclick="chessFreeSkill()"/>
+<input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
 <script type="text/javascript">
+    var desc = "<%=request.getParameter("desc")%>";
+    var roomName = "<%=request.getParameter("roomName")%>";
+    //记录房间名称
+    chessMyRoom = roomName;
+    //1 红色
+    myColor = desc;
+    //红方先走
+    myStep = desc;
+    console.log(desc);
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
@@ -177,12 +188,12 @@
         init();
     }
     else {
-        alert('当前浏览器 Not support websocket')
+        alert('当前浏览器 Not support websocket');
     }
 
     //连接发生错误的回调方法
     websocket.onerror = function () {
-        setMessageInnerHTML("WebSocket连接发生错误");
+        alert("WebSocket连接发生错误");
     };
 
     //连接成功建立的回调方法
@@ -216,8 +227,7 @@
     }
 
     //发送消息
-    function send() {
-        var message = document.getElementById('text').value;
+    function send(message) {
         websocket.send(message);
     }
     //初始位置
@@ -228,35 +238,47 @@
         $("#0_-4").addClass("huo");
         $("#0_-5").addClass("tu");
         $("#0_-6").addClass("shuai");
-        //我方为红色
-        myColor = 1;
-        //红方先走
-        myStep = 1;
+
     }
 
-    $('#chessBoard').click(function (e) {
-        console.log(e)
-        if(myStep % 2 != 1){
+    $('.squ-line').click(function (e) {
+        console.log(e);
+        if(myStep % 2 !== 1){
             return;
         }
-        //判断是否第一次有效点击
+        //获取点击点id,class
         var id = e.target.id;
-        //判断点击处是否有棋子
-        var firstClass = chessJudgePoint(e.target.classList);
-        if (!firstClass){
-            if (myColor % 2 === 1){
+        var classList = e.target.classList;
 
-            }
-        }
+        //根据id获取坐标值
         var point = chessGetPosition(id);
-        if ( chessIsFirst(point)){
+        //判断是否第一次有效点击
+        //第一存点为空
+        if (chessIsFirst()){
+            //判断点击处是否有棋子,返回对应class
+            var firstClass = chessJudgePoint(classList);
+            if (firstClass){
+                //判断点击是否是我方棋子
+                if (chessJudgeMyChess(firstClass)){
+                    chessFirstClass = firstClass;
+                    chessIsSkill();
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+            //第一个有效点击点放入第一存点
             chessPutFirstPoint(point);
             return;
         } else{
             //判断是否释放技能
-
+            if (isSkill === 1){
+                //填充释放技能后的棋子位置
+                chessPutSkillPoint(point, classList);
+            }
             //判断可不可以走这里
-            chessCanMove(point, "jin", false);
+            chessCanMove(point, chessFirstClass, false)
         }
 
     });
