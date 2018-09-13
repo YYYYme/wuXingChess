@@ -25,13 +25,14 @@
 </body>
 
 <script type="text/javascript">
+    console.log("1");
     //加入房间
     function joinRoom(roomName) {
         //判断房间是否满员
         var desc = judgeRoomFull(roomName);
         console.log("desc:"+desc);
         //1:第一个 0:第二个  -1:满员
-        if (desc === "-1"){
+        if (desc === -1){
             alert("房间已满员");
             return;
         }
