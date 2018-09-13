@@ -1,7 +1,7 @@
 var chessMyRoom;
 var myStep = 0;
-var myColor = 0;
-var firstPoint = {
+var myColor = 1;
+var firstPoint={
     x: 0,
     y: 0
 };
@@ -58,56 +58,121 @@ function chessPutSecondPoint(point) {
 
 //判断是否可以走这里
 function chessCanMove(point, chessClass, isSkill) {
-    if (chessClass === "jin") {
+    if (chessClass === chessFirstClass) {
         //没放技能
         if (!isSkill) {
             //落点是否有我方棋子
 
-            //可以走
-            if (chessNoSkillCanMove(point)) {
-                //把棋子class添加到第二步位置,删除第一步位置
-                var firstPointId = firstPoint.x + "_" + firstPoint.y;
-                var secondPointId = point[0] + "_" + point[1];
-                $("#" + firstPointId).removeClass(chessClass);
-                $("#" + secondPointId).addClass(chessClass);
-                //发送信息
-
-                //初始化第一个有效点
-                chessClearFirstPoint();
-            }
-        }
-    }
+             //可以走
+             if(chessNoSkillCanMove(point)){
+                 //保存第二点
+                 chessPutSecondPoint(point);
+                 //发送信息
+             }
+         }
+     }
 }
-
 //判断没放技能时下一步是否可以走这里
 function chessNoSkillCanMove(point) {
     var xMove = Math.abs(parseInt(point[0]) - parseInt(firstPoint.x));
-    var yMove = Math.abs(parseInt(point[1]) - parseInt(firstPoint.y));
-    if (xMove <= 1 && yMove <= 1 && xMove !== yMove) {
+    var yMove = Math.abs(parseInt(point[1]) - parseInt(firstPoint.y) );
+    if(xMove <= 1 && yMove <= 1 && xMove != yMove){
         return true;
     }
     return false;
 }
-
 //清空第一个点击保存点
 function chessClearFirstPoint() {
     firstPoint.x = 0;
     firstPoint.y = 0;
 }
-
+//清空第二个点击保存点
+function chessClearSecondPoint() {
+    chessSecondPoint.x = 0;
+    chessSecondPoint.y = 0;
+}
 //判断点击点对应棋子
 function chessJudgePoint(classList) {
-    for (var i = 0; i < classList.size; i++) {
-        var cl = classList[i];
-        if (chessJudgeRed(cl) || chessJudgeBlack(cl)) {
-            return cl;
+    var cl='';
+    for(var i = 0; i < classList.length; i++){
+        if (chessJudgeRed(classList[i]) || chessJudgeBlack(classList[i])) {
+            cl=classList[i];
+            break;
+        }
+    }
+    return cl;
+}
+//判断是否是红方
+function chessJudgeRed(cl) {
+    if (cl == "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
+        return true;
+    }
+    return false;
+}
+//判断是否是黑方
+function chessJudgeBlack(cl) {
+    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
+        return true;
+    }
+    return false;
+}
+//判断点击是否是我方棋子
+function chessJudgeMyChess(cl) {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
+        if (myColor == 1){
+            return true;
+        }
+    } else {
+        if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
+            if (myColor === 0){
+                return true;
+            }
         }
     }
 }
+//填充释放技能后的棋子位置
+function chessPutSkillPoint(point, classList){
+    //点击处是否为空
+    cl = chessJudgePoint(classList);
+    if(!cl){
+        return;
+    } else {
+        //木技能
+        if(chessFirstClass === "mu" || chessFirstClass === "mu0"){
+            //判断第二个点击点是否为我方棋子
+            if(chessJudgeMyChess(cl)){
+                return;
+            } else {
+                //计算是否在束缚范围内
+                if(chessCanShuFu(point)){
+                    //保存第二点
+                    chessPutSecondPoint(point);
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+}
+//计算是否在束缚范围内
+function chessCanShuFu(point) {
+    var xMove = Math.abs(parseInt(point[0]) - parseInt(firstPoint.x));
+    var yMove = Math.abs(parseInt(point[1]) - parseInt(firstPoint.y) );
+    if(xMove <= 1 && yMove <= 1){
+        return true;
+    }
+    return false;
+}
+//是否亮起释放技能,点我方棋子时控制按钮是否亮起
+function chessIsSkill(){
+
+}
+//技能释放按钮亮起
+function chessSkillLight() {
 
 //判断是否是红方
 function chessJudgeRed(cl) {
-    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu") {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
         return true;
     }
     return false;
@@ -115,7 +180,7 @@ function chessJudgeRed(cl) {
 
 //判断是否是黑方
 function chessJudgeBlack(cl) {
-    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0") {
+    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
         return true;
     }
     return false;
@@ -123,12 +188,12 @@ function chessJudgeBlack(cl) {
 
 //判断点击是class否是我方棋子
 function chessJudgeMyChess(cl) {
-    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu") {
+    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
         if (myColor === 1) {
             return true;
         }
     } else {
-        if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0") {
+        if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
             if (myColor === 0) {
                 return true;
             }
@@ -207,4 +272,31 @@ function chessJudgeIsBoss(cl) {
         return true;
     }
     return false;
+}
+}
+//技能释放按钮变暗
+function chessSkillDark() {
+
+}
+//点击查看是否可以完成,完成就发送信息
+function chessMeStop(){
+    //判断目标位置坐标（x,y）是否为（0,0），若为(0,0)且所选棋子不为'帅'，则需重选目标位置
+    if (chessSecondPoint.x==0 && chessSecondPoint.y==0 && chessFirstClass!="shuai" && chessFirstClass!="shuai0"){
+        alert("请选择目标位置");
+    }else {
+        //把棋子class添加到第二步位置,删除第一步位置
+        var firstPointId = firstPoint.x + "_" + firstPoint.y;
+        var secondPointId = chessSecondPoint.x + "_" + chessSecondPoint.y;
+        $("#" + firstPointId).removeClass(chessFirstClass);
+        $("#" + secondPointId).addClass(chessFirstClass);
+        //初始化第一个有效点
+        chessClearFirstPoint();
+        //初始化第二个有效点
+        chessClearSecondPoint();
+        //组装消息
+
+        //发送信息
+    }
+
+
 }
