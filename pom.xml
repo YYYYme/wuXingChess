@@ -32,10 +32,15 @@
           <version>8.0</version>
           <scope>provided</scope>
       </dependency>
-      <dependency>
+      <!--<dependency>
           <groupId>javax.servlet</groupId>
           <artifactId>jstl</artifactId>
           <version>1.2</version>
+      </dependency>-->
+      <dependency>
+          <groupId>com.alibaba</groupId>
+          <artifactId>fastjson</artifactId>
+          <version>1.2.4</version>
       </dependency>
   </dependencies>
 
