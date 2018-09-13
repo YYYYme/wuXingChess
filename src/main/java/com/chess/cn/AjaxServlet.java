@@ -1,6 +1,8 @@
 package com.chess.cn;
 
 
+import com.chess.cn.dto.RoomDTO;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
