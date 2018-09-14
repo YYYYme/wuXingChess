@@ -49,6 +49,36 @@
             width:65px;
             height:65px;
         }
+        .jin0{
+            background-image: url("./static/plugins/images/jin0.png");
+            width:65px;
+            height:65px;
+        }
+        .mu0{
+            background-image: url("./static/plugins/images/mu0.png");
+            width:65px;
+            height:65px;
+        }
+        .shui0{
+            background-image: url("./static/plugins/images/shui0.png");
+            width:65px;
+            height:65px;
+        }
+        .huo0{
+            background-image: url("./static/plugins/images/huo0.png");
+            width:65px;
+            height:65px;
+        }
+        .tu0{
+            background-image: url("./static/plugins/images/tu0.png");
+            width:65px;
+            height:65px;
+        }
+        .shuai0{
+            background-image: url("./static/plugins/images/shuai0.png");
+            width:65px;
+            height:65px;
+        }
     </style>
 </head>
 <body>
@@ -206,11 +236,17 @@
         var message = event.data;
         var obj = eval('(' + message + ')');
         console.log(obj);
+        //开始游戏
         if(obj.type === 0){
             chessIsBegin = 1;
             //初始化对方棋子
             initOtherChess();
         }
+        //收到对方走步
+        if(obj.type === 1){
+
+        }
+
     };
 
     //连接关闭的回调方法
@@ -239,22 +275,39 @@
     }
     //初始位置
     function init(){
-        $("#0_-1").addClass("jin");
-        $("#0_-2").addClass("mu");
-        $("#0_-3").addClass("shui");
-        $("#0_-4").addClass("huo");
-        $("#0_-5").addClass("tu");
-        $("#0_-6").addClass("shuai");
-
+        if (myColor == 0){
+            $("#0_1").addClass("jin0");
+            $("#0_2").addClass("mu0");
+            $("#0_3").addClass("shui0");
+            $("#0_4").addClass("huo0");
+            $("#0_5").addClass("tu0");
+            $("#0_6").addClass("shuai0");
+        } else {
+            $("#0_-1").addClass("jin");
+            $("#0_-2").addClass("mu");
+            $("#0_-3").addClass("shui");
+            $("#0_-4").addClass("huo");
+            $("#0_-5").addClass("tu");
+            $("#0_-6").addClass("shuai");
+        }
     }
     //初始对方位置
     function initOtherChess(){
-        $("#0_1").addClass("jin0");
-        $("#0_2").addClass("mu0");
-        $("#0_3").addClass("shui0");
-        $("#0_4").addClass("huo0");
-        $("#0_5").addClass("tu0");
-        $("#0_6").addClass("shuai0");
+        if (myColor == 1){
+            $("#0_1").addClass("jin0");
+            $("#0_2").addClass("mu0");
+            $("#0_3").addClass("shui0");
+            $("#0_4").addClass("huo0");
+            $("#0_5").addClass("tu0");
+            $("#0_6").addClass("shuai0");
+        } else {
+            $("#0_-1").addClass("jin");
+            $("#0_-2").addClass("mu");
+            $("#0_-3").addClass("shui");
+            $("#0_-4").addClass("huo");
+            $("#0_-5").addClass("tu");
+            $("#0_-6").addClass("shuai");
+        }
     }
 
     $('.squ-line').click(function (e) {
