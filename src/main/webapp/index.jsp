@@ -233,17 +233,16 @@
 
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
-        var message = event.data;
-        var obj = eval('(' + message + ')');
-        console.log(obj);
+        var message = eval('(' + event.data + ')');
+        console.log(message);
         //开始游戏
-        if(obj.type === 0){
+        if(message.type === 0){
             chessIsBegin = 1;
             //初始化对方棋子
             initOtherChess();
         }
         //收到对方走步
-        if(obj.type === 1){
+        if(message.type === 1){
 
         }
 
