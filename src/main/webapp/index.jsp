@@ -110,7 +110,7 @@
         <span id="-1_0" class="squ-line"></span>
         <span id="0_0" class="squ-line">
                     <img alt="" class="diamond" src="./static/plugins/images/diamond.png">
-                </span>
+        </span>
         <span id="1_0" class="squ-line"></span>
         <span id="2_0" class="squ-line"></span>
         <span id="3_0" class="squ-line"></span>
@@ -167,7 +167,7 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" onclick="chessIsSkill()"/>
+<input type="button" id="chessIsSkill" value="释放技能" onclick="chessFreeSkill()"/>
 <input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
@@ -184,7 +184,7 @@
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/websocket");
+        websocket = new WebSocket("ws://localhost:8080/websocket?roomName="+ roomName+"&color="+myColor);
         init();
     }
     else {
@@ -241,7 +241,7 @@
 
     }
 
-    $('#chessBoard').click(function (e) {
+    $('.squ-line').click(function (e) {
         console.log(e);
         if(myStep % 2 !== 1){
             return;
@@ -257,10 +257,11 @@
         if (chessIsFirst()){
             //判断点击处是否有棋子,返回对应class
             var firstClass = chessJudgePoint(classList);
-            if (!firstClass){
+            if (firstClass){
                 //判断点击是否是我方棋子
                 if (chessJudgeMyChess(firstClass)){
                     chessFirstClass = firstClass;
+                    chessIsSkill();
                 } else {
                     return;
                 }
@@ -277,7 +278,7 @@
                 chessPutSkillPoint(point, classList);
             }
             //判断可不可以走这里
-            chessCanMove(point, "jin", false);
+            chessCanMove(point, chessFirstClass, false)
         }
 
     });
