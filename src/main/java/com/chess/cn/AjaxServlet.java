@@ -31,10 +31,10 @@ public class AjaxServlet extends HttpServlet {
         //判断房间是否满员
         for (RoomDTO roomDTO : WebSocket.getRoomList()){
             if (roomDTO.getName().equals(roomName)){
-                if (null != roomDTO.getFirstPlayer() || !"".equals(roomDTO.getFirstPlayer())){
+                if (null != roomDTO.getFirstPlayer()){
                     roomDTO.setFirstPlayer("1");
                     response.getWriter().print("1");
-                } else if (null != roomDTO.getSecondPlayer() || !"".equals(roomDTO.getSecondPlayer())) {
+                } else if (null != roomDTO.getSecondPlayer()) {
                     roomDTO.setSecondPlayer("0");
                     response.getWriter().print("0");
                 } else {
