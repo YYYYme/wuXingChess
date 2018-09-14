@@ -14,16 +14,17 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @ServerEndpoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
+ * 注解@ServerEndpoint 是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
  */
 @ServerEndpoint("/websocket")
 public class WebSocket {
     //存放房间
     private static List<RoomDTO> roomList = new ArrayList<>();
-    //存放房间用户和sessionId的对应关系
+    //存放房间用户和sessionId的对应关系,key:room+color,value:sessionId
     private static Map<String, String> room2IdMap = new HashMap<>();
-    private static Map<String, String> id2room2Map = new HashMap<>();
+    //key:sessionId,value:room+color
+    private static Map<String, String> id2roomMap = new HashMap<>();
 
     static {
         RoomDTO roomDTO = new RoomDTO();
@@ -52,8 +53,10 @@ public class WebSocket {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        webSocketSet.add(this);     //加入set中
-        addOnlineCount();           //在线数加1
+        //加入set中
+        webSocketSet.add(this);
+        //在线数加1
+        addOnlineCount();
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
         //获取参数
         String queryString = session.getQueryString();
@@ -61,7 +64,32 @@ public class WebSocket {
         String room = split[0].split("=")[1];
         String color = split[1].split("=")[1];
         room2IdMap.put(room + color, session.getId());
-        id2room2Map.put(session.getId(), room + color);
+        id2roomMap.put(session.getId(), room + color);
+        //当为第二人加入时通知双方开始
+        noticeToBegin(color, room);
+    }
+
+    /**
+     * 当为第二人加入时通知双方开始
+     */
+    private void noticeToBegin(String color, String room) {
+        if ("0".equals(color)) {
+            String firstSessionId = room2IdMap.get(room + "1");
+            String secondSessionId = room2IdMap.get(room + color);
+            ChessMessageDTO chessMessageDTO = new ChessMessageDTO();
+            chessMessageDTO.setType(0);
+            String message = JSON.toJSONString(chessMessageDTO);
+            //发消息
+            for (WebSocket item : webSocketSet) {
+                if (item.session.getId().equals(firstSessionId) || item.session.getId().equals(secondSessionId)) {
+                    try {
+                        item.sendMessage(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -69,17 +97,19 @@ public class WebSocket {
      */
     @OnClose
     public void onClose() {
-        webSocketSet.remove(this);  //从set中删除
-        subOnlineCount();           //在线数减1
+        //从set中删除
+        webSocketSet.remove(this);
+        //在线数减1
+        subOnlineCount();
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
         //删除list中的对应值
         String id = this.session.getId();
-        String roomAndDesc = id2room2Map.get(id);
+        String roomAndDesc = id2roomMap.get(id);
         String desc = roomAndDesc.substring(roomAndDesc.length() - 1, roomAndDesc.length());
         String room = roomAndDesc.substring(0, roomAndDesc.length() - 1);
         for (RoomDTO roomDTO : roomList) {
             if (roomDTO.getName().equals(room)) {
-                if (desc.equals("1")) {
+                if ("1".equals(desc)) {
                     roomDTO.setFirstPlayer(null);
                 } else {
                     roomDTO.setSecondPlayer(null);
@@ -102,21 +132,21 @@ public class WebSocket {
         String chessRoom = chessMessageDTO.getChessRoom();
         String color = chessMessageDTO.getColor();
         //获取对手颜色
-        if (color.equals("0")) {
+        if ("0".equals(color)) {
             color = "1";
         } else {
             color = "0";
         }
         //获取对手id
         String sessionId = room2IdMap.get(chessRoom + color);
-        //群发消息
+        //发消息
         for (WebSocket item : webSocketSet) {
             if (item.session.getId().equals(sessionId)) {
                 try {
                     item.sendMessage(message);
+                    break;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    continue;
                 }
             }
         }
@@ -125,8 +155,8 @@ public class WebSocket {
     /**
      * 发生错误时调用
      *
-     * @param session
-     * @param error
+     * @param session session
+     * @param error   error
      */
     @OnError
     public void onError(Session session, Throwable error) {
@@ -137,23 +167,23 @@ public class WebSocket {
     /**
      * 这个方法与上面几个方法不一样。没有用注解，是根据自己需要添加的方法。
      *
-     * @param message
-     * @throws IOException
+     * @param message message
+     * @throws IOException IOException
      */
     private void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
         //this.session.getAsyncRemote().sendText(message);
     }
 
-    public static synchronized int getOnlineCount() {
+    private static synchronized int getOnlineCount() {
         return onlineCount;
     }
 
-    public static synchronized void addOnlineCount() {
+    private static synchronized void addOnlineCount() {
         WebSocket.onlineCount++;
     }
 
-    public static synchronized void subOnlineCount() {
+    private static synchronized void subOnlineCount() {
         WebSocket.onlineCount--;
     }
 

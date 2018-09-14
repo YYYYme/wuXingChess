@@ -1,4 +1,6 @@
 var chessMyRoom;
+//是否开始游戏,0:未开始 1:开始
+var chessIsBegin = 0;
 var myStep = 0;
 var myColor = 1;
 var firstPoint={

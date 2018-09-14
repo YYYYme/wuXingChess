@@ -199,12 +199,19 @@
     //连接成功建立的回调方法
     websocket.onopen = function () {
         setMessageInnerHTML("WebSocket连接成功");
-    }
+    };
 
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
-        setMessageInnerHTML(event.data);
-    }
+        var message = event.data;
+        var obj = eval('(' + message + ')');
+        console.log(obj);
+        if(obj.type === 0){
+            chessIsBegin = 1;
+            //初始化对方棋子
+            initOtherChess();
+        }
+    };
 
     //连接关闭的回调方法
     websocket.onclose = function () {
@@ -240,9 +247,22 @@
         $("#0_-6").addClass("shuai");
 
     }
+    //初始对方位置
+    function initOtherChess(){
+        $("#0_1").addClass("jin0");
+        $("#0_2").addClass("mu0");
+        $("#0_3").addClass("shui0");
+        $("#0_4").addClass("huo0");
+        $("#0_5").addClass("tu0");
+        $("#0_6").addClass("shuai0");
+    }
 
     $('.squ-line').click(function (e) {
         console.log(e);
+        if (chessIsBegin === 0){
+            alert("没有对手加入房间");
+            return;
+        }
         if(myStep % 2 !== 1){
             return;
         }

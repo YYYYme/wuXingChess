@@ -18,6 +18,19 @@ public class ChessMessageDTO {
     private String chessSecondClass;
     private List<String> chessSecondTrackX;
     private List<String> chessSecondTrackY;
+    /**
+     * 传输类型
+     * 0:开始游戏
+     */
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getStep() {
         return step;
