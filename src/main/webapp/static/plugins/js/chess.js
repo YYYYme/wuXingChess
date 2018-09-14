@@ -134,12 +134,17 @@ function chessIsSkill(){
 }
 //技能释放按钮亮起
 function chessSkillLight() {
-
+    $("#chessIsSkill").removeAttr("disabled");
 }
 //技能释放按钮变暗
 function chessSkillDark() {
+    $("#chessMeStop").attr("disabled","true");
+}
+//释放技能
+function chessReleaseSkill(){
 
 }
+
 //判断是否是红方
 function chessJudgeRed(cl) {
     if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {

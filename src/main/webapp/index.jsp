@@ -167,7 +167,7 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" onclick="chessFreeSkill()"/>
+<input type="button" id="chessIsSkill" value="释放技能" disabled="true" onclick="chessReleaseSkill()"/>
 <input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
@@ -255,6 +255,8 @@
         //判断是否第一次有效点击
         //第一存点为空
         if (chessIsFirst()){
+            chessSkillLight();
+            chessSkillDark();
             //判断点击处是否有棋子,返回对应class
             var firstClass = chessJudgePoint(classList);
             if (firstClass){
