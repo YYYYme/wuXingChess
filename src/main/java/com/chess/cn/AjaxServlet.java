@@ -38,7 +38,7 @@ public class AjaxServlet extends HttpServlet {
                     roomDTO.setSecondPlayer("0");
                     response.getWriter().print("0");
                 } else {
-                    response.getWriter().print("-1");
+                    response.getWriter().print("0");//-1
                 }
             }
         }

@@ -243,7 +243,7 @@
 
     $('.squ-line').click(function (e) {
         console.log(e);
-        if(myStep % 2 !== 1){
+        if(myStep % 2 !== 0){
             return;
         }
         //获取点击点id,class
