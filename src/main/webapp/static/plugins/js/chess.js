@@ -36,7 +36,7 @@ function chessGetPosition(id) {
 
 //第一存点是否为空
 function chessIsFirst() {
-    if (firstPoint.x === 0 && firstPoint.y === 0) {
+    if (firstPoint.x === INIT_VALUE && firstPoint.y === INIT_VALUE) {
         return true;
     } else {
         return false;
@@ -89,8 +89,8 @@ function chessClearFirstPoint() {
 }
 //清空第二个点击保存点
 function chessClearSecondPoint() {
-    chessSecondPoint.x = 0;
-    chessSecondPoint.y = 0;
+    chessSecondPoint.x = INIT_VALUE;
+    chessSecondPoint.y = INIT_VALUE;
 }
 //判断点击点对应棋子
 function chessJudgePoint(classList) {
