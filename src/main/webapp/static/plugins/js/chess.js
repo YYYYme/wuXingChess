@@ -4,9 +4,10 @@ var chessMyRoom;
 var chessIsBegin = 0;
 var myStep = 0;
 var myColor = 1;
-var firstPoint = {
-    x: 0,
-    y: 0
+var INIT_VALUE = 99;
+var firstPoint={
+    x: INIT_VALUE,
+    y: INIT_VALUE
 };
 //第一点样式
 var chessFirstClass;
@@ -18,8 +19,8 @@ var chessSecondTrackX = new Array();
 var chessSecondTrackY = new Array();
 //第二个点
 var chessSecondPoint = {
-    x: 0,
-    y: 0
+    x: INIT_VALUE,
+    y: INIT_VALUE
 };
 var chessSecondClass;
 //是否释放技能
@@ -38,7 +39,7 @@ function chessGetPosition(id) {
 
 //第一存点是否为空
 function chessIsFirst() {
-    if (firstPoint.x === 0 && firstPoint.y === 0) {
+    if (firstPoint.x === INIT_VALUE && firstPoint.y === INIT_VALUE) {
         return true;
     } else {
         return false;
@@ -169,8 +170,13 @@ function chessNoSkillCanMove(point) {
 
 //清空第一个点击保存点
 function chessClearFirstPoint() {
-    firstPoint.x = 0;
-    firstPoint.y = 0;
+    firstPoint.x = INIT_VALUE;
+    firstPoint.y = INIT_VALUE;
+}
+//清空第二个点击保存点
+function chessClearSecondPoint() {
+    chessSecondPoint.x = INIT_VALUE;
+    chessSecondPoint.y = INIT_VALUE;
 }
 
 //清空第二个点击保存点
@@ -230,32 +236,6 @@ function chessCanShuFu(point) {
     }
     return false;
 }
-
-//是否亮起释放技能,点我方棋子时控制按钮是否亮起
-function chessIsSkill() {
-
-}
-
-//技能释放按钮亮起
-function chessSkillLight() {
-}
-
-//判断是否是红方
-function chessJudgeRed(cl) {
-    if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
-        return true;
-    }
-    return false;
-}
-
-//判断是否是黑方
-function chessJudgeBlack(cl) {
-    if (cl === "jin0" || cl === "mu0" || cl === "shui0" || cl === "huo0" || cl === "tu0" || cl === "shuai0") {
-        return true;
-    }
-    return false;
-}
-
 //判断点击是class否是我方棋子
 function chessJudgeMyChess(cl) {
     if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
@@ -270,7 +250,6 @@ function chessJudgeMyChess(cl) {
         }
     }
 }
-
 //填充释放技能后的棋子位置
 function chessPutSkillPoint(point, classList) {
     //点击处是否为空
@@ -337,21 +316,18 @@ function chessCanBorn(point) {
     //中间有障碍
 
 }
-//是否亮起释放技能,点我方棋子时控制按钮是否亮起
-function chessIsSkill() {
+//是否可以释放技能,点我方棋子时控制按钮是否亮起
+function chessIsSkill(){
 
 }
-
 //技能释放按钮亮起
 function chessSkillLight() {
-
+    $("#chessIsSkill").removeAttr("disabled");
 }
-
 //技能释放按钮变暗
 function chessSkillDark() {
-
+    $("#chessMeStop").attr("disabled","true");
 }
-
 //走按钮亮起
 function chessWalkLight() {
     $("#chessMeStop").attr("disabled",false);
@@ -396,7 +372,6 @@ function chessAssembleMessage() {
     var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '"}';
     return message;
 }
-
 //判断目标位置坐标（x,y）是否为（0,0），若为(0,0)且所选棋子不为'帅'，则需重选目标位置
 function chessJudgeIsInDiamond(x, y) {
     if (x == 0 && y == 0 && chessFirstClass != "shuai" && chessFirstClass != "shuai0") {
