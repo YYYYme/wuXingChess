@@ -5,7 +5,7 @@ var chessIsBegin = 0;
 var myStep = 0;
 var myColor = 1;
 var INIT_VALUE = 99;
-var firstPoint={
+var firstPoint = {
     x: INIT_VALUE,
     y: INIT_VALUE
 };
@@ -122,9 +122,9 @@ function chessIsAddStep() {
                 }
             }
         }
-    } else if (chessFirstClass === "shui" || chessFirstClass === "shui"){
+    } else if (chessFirstClass === "shui" || chessFirstClass === "shui") {
         //走一步后我方可以继续走
-        if (chessSkills == 1){
+        if (chessSkills == 1) {
             return false;
         }
     }
@@ -175,6 +175,7 @@ function chessClearFirstPoint() {
     firstPoint.x = INIT_VALUE;
     firstPoint.y = INIT_VALUE;
 }
+
 //清空第二个点击保存点
 function chessClearSecondPoint() {
     chessSecondPoint.x = INIT_VALUE;
@@ -232,6 +233,7 @@ function chessCanShuFu(point) {
     }
     return false;
 }
+
 //判断点击是class否是我方棋子
 function chessJudgeMyChess(cl) {
     if (cl === "jin" || cl === "mu" || cl === "shui" || cl === "huo" || cl === "tu" || cl === "shuai") {
@@ -246,6 +248,7 @@ function chessJudgeMyChess(cl) {
         }
     }
 }
+
 //填充释放技能后的棋子位置
 function chessPutSkillPoint(point, classList) {
     //点击处是否为空
@@ -277,7 +280,7 @@ function chessPutSkillPoint(point, classList) {
             myStep += 1;
             //可以走棋
             chessWalkLight();
-        } else if(chessFirstClass === "huo" || chessFirstClass === "huo0"){
+        } else if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
             //判断第二个点击点class是否为我方棋子
             if (chessJudgeMyChess(cl)) {
                 alert("只能燃烧对方棋子");
@@ -303,35 +306,81 @@ function chessPutSkillPoint(point, classList) {
         }
     }
 }
+
 //计算是否可以燃烧
 function chessCanBorn(point) {
     //不在同一行或同一列
-    if (firstPoint.x != point[0] && firstPoint.y != point[1]){
+    if (firstPoint.x != point[0] && firstPoint.y != point[1]) {
         return false;
     }
-    //中间有障碍
-
+    //中间有钻石
+    if (firstPoint.x == 0 && firstPoint.y * point[1] < 0) {
+        return false;
+    }
+    if (firstPoint.y == 0 && firstPoint.x * point[0] < 0) {
+        return false;
+    }
+    //中间有其它棋子
+    if(!chessJudgeBetween(firstPoint, point, firstPoint.y, point[1])){
+        return false;
+    }
+    return true;
 }
+
+//判断两个点之间是否有棋子,不同的坐标传null(同一行时x传null),true:没有
+function chessJudgeBetween(firstPoint, point, p1, p2) {
+    var m1, m2;
+    if (p1 < p2) {
+        m1 = p1;
+        m2 = p2;
+    } else {
+        m1 = p2;
+        m2 = p1;
+    }
+    //横坐标相同
+    if (firstPoint.x == point[0]) {
+        for (var i = m1 + 1; i < m2; i++) {
+            var id = firstPoint.x + "_" + i;
+            var cl = chessJudgePointById(id);
+            if (!cl){
+                return false;
+            }
+        }
+    } else {
+        for (var i = m1 + 1; i < m2; i++) {
+            var id = i + "_" + firstPoint;
+            var cl = chessJudgePointById(id);
+            if (!cl){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 //是否可以释放技能,点我方棋子时控制按钮是否亮起
-function chessIsSkill(){
+function chessIsSkill() {
 
 }
+
 //技能释放按钮亮起
 function chessSkillLight() {
     $("#chessIsSkill").removeAttr("disabled");
 }
+
 //技能释放按钮变暗
 function chessSkillDark() {
-    $("#chessMeStop").attr("disabled","true");
+    $("#chessMeStop").attr("disabled", "true");
 }
+
 //走按钮亮起
 function chessWalkLight() {
-    $("#chessMeStop").attr("disabled",false);
+    $("#chessMeStop").attr("disabled", false);
 }
 
 //走按钮变暗
 function chessWalkDark() {
-    $("#chessMeStop").attr("disabled",true);
+    $("#chessMeStop").attr("disabled", true);
 }
 
 //是否为老将
@@ -368,6 +417,7 @@ function chessAssembleMessage() {
     var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '"}';
     return message;
 }
+
 //判断目标位置坐标（x,y）是否为（0,0），若为(0,0)且所选棋子不为'帅'，则需重选目标位置
 function chessJudgeIsInDiamond(x, y) {
     if (x == 0 && y == 0 && chessFirstClass != "shuai" && chessFirstClass != "shuai0") {
@@ -390,6 +440,7 @@ function chessTraceNoSkill(message) {
         }
     }
 }
+
 //点击释放技能
 function chessReleaseSkill() {
 
