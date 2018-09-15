@@ -251,7 +251,7 @@
             //更新步数
             myStep = message.step;
             //走按钮变亮
-            $("#chessMeStop").attr("disabled",false);
+            chessWalkLight();
         }
 
     };

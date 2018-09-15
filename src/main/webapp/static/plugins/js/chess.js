@@ -221,31 +221,6 @@ function chessJudgeBlack(cl) {
     return false;
 }
 
-//填充释放技能后的棋子位置
-function chessPutSkillPoint(point, classList) {
-    //点击处是否为空
-    cl = chessJudgePoint(classList);
-    if (!cl) {
-        return;
-    } else {
-        //木技能
-        if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
-            //判断第二个点击点是否为我方棋子
-            if (chessJudgeMyChess(cl)) {
-                return;
-            } else {
-                //计算是否在束缚范围内
-                if (chessCanShuFu(point)) {
-                    //保存第二点
-                    chessPutSecondPoint(point);
-                } else {
-                    return;
-                }
-            }
-        }
-    }
-}
-
 //计算是否在束缚范围内
 function chessCanShuFu(point) {
     var xMove = Math.abs(parseInt(point[0]) - parseInt(firstPoint.x));
@@ -299,18 +274,20 @@ function chessJudgeMyChess(cl) {
 //填充释放技能后的棋子位置
 function chessPutSkillPoint(point, classList) {
     //点击处是否为空
-    cl = chessJudgePoint(classList);
-    if (!cl) {
+    var cl = chessJudgePoint(classList);
+    if (cl) {
         return;
     } else {
         //木技能
         if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
             //判断第二个点击点class是否为我方棋子
             if (chessJudgeMyChess(cl)) {
+                alert("只能束缚对方棋子");
                 return;
             }
             //判断点击点class是否为老将
             if (chessJudgeIsBoss(cl)) {
+                alert("不可以束缚帅");
                 return;
             }
             //计算是否在束缚范围内
@@ -318,25 +295,48 @@ function chessPutSkillPoint(point, classList) {
                 //保存第二点
                 chessPutSecondPoint(point);
             } else {
+                alert("不在束缚范围内");
                 return;
             }
+            //更新步数
+            myStep += 1;
+            //可以走棋
+            chessWalkLight();
+        } else if(chessFirstClass === "huo" || chessFirstClass === "huo0"){
+            //判断第二个点击点class是否为我方棋子
+            if (chessJudgeMyChess(cl)) {
+                alert("只能燃烧对方棋子");
+                return;
+            }
+            //判断点击点class是否为老将
+            if (chessJudgeIsBoss(cl)) {
+                alert("不可以燃烧帅");
+                return;
+            }
+            //计算是否可以燃烧
+            if (chessCanBorn(point)) {
+                //保存第二点
+                chessPutSecondPoint(point);
+            } else {
+                alert("此位置不可燃烧");
+                return;
+            }
+            //更新步数
+            myStep += 1;
+            //可以走棋
+            chessWalkLight();
         }
-        //组装消息
-        var message = '{step:' + myStep + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:"' + firstPoint.x + '",y:"' + firstPoint.y + '"},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:"' + chessSecondPoint.x + '",y:"' + chessSecondPoint.y + '"},chessFirstTrackX:"' + chessFirstTrackX + '",chessFirstTrackY:"' + chessFirstTrackY + '",chessSecondTrackX:"' + chessSecondTrackX + '",chessSecondTrackY:"' + chessSecondTrackY + '",chessSecondClass:"' + chessSecondClass + '"}';
-        send(message);
     }
 }
-
-//计算是否在束缚范围内
-function chessCanShuFu(point) {
-    var xMove = Math.abs(parseInt(point[0]) - parseInt(firstPoint.x));
-    var yMove = Math.abs(parseInt(point[1]) - parseInt(firstPoint.y));
-    if (xMove <= 1 && yMove <= 1) {
-        return true;
+//计算是否可以燃烧
+function chessCanBorn(point) {
+    //不在同一行或同一列
+    if (firstPoint.x != point[0] && firstPoint.y != point[1]){
+        return false;
     }
-    return false;
-}
+    //中间有障碍
 
+}
 //是否亮起释放技能,点我方棋子时控制按钮是否亮起
 function chessIsSkill() {
 
@@ -352,18 +352,22 @@ function chessSkillDark() {
 
 }
 
+//走按钮亮起
+function chessWalkLight() {
+    $("#chessMeStop").attr("disabled",false);
+}
+
+//走按钮变暗
+function chessWalkDark() {
+    $("#chessMeStop").attr("disabled",true);
+}
+
 //是否为老将
 function chessJudgeIsBoss(cl) {
     if (cl === "shuai" || cl === "shuai0") {
         return true;
     }
     return false;
-}
-
-
-//技能释放按钮变暗
-function chessSkillDark() {
-
 }
 
 //点击走判断是否可以完成,完成就发送信息
@@ -384,7 +388,7 @@ function chessMeStop() {
     //初始化水步数
     chessSkills = 0;
     //走按钮变暗
-    $("#chessMeStop").attr("disabled",true);
+    chessWalkDark();
 }
 
 //组装走步信息
