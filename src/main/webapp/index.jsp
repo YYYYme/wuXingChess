@@ -280,45 +280,6 @@
     function send(message) {
         websocket.send(message);
     }
-    //初始位置
-    function init(){
-        if (myColor == 0){
-            $("#0_0").addClass("diamond");
-            $("#0_1").addClass("jin0");
-            $("#0_2").addClass("mu0");
-            $("#0_3").addClass("shui0");
-            $("#0_4").addClass("huo0");
-            $("#0_5").addClass("tu0");
-            $("#0_6").addClass("shuai0");
-        } else {
-            $("#0_0").addClass("diamond");
-            $("#0_-1").addClass("jin");
-            $("#0_-2").addClass("mu");
-            $("#0_-3").addClass("shui");
-            $("#0_-4").addClass("huo");
-            $("#0_-5").addClass("tu");
-            $("#0_-6").addClass("shuai");
-        }
-    }
-    //初始对方位置
-    function initOtherChess(){
-        if (myColor == 1){
-            $("#0_1").addClass("jin0");
-            $("#0_2").addClass("mu0");
-            $("#0_3").addClass("shui0");
-            $("#0_4").addClass("huo0");
-            $("#0_5").addClass("tu0");
-            $("#0_6").addClass("shuai0");
-        } else {
-            $("#0_-1").addClass("jin");
-            $("#0_-2").addClass("mu");
-            $("#0_-3").addClass("shui");
-            $("#0_-4").addClass("huo");
-            $("#0_-5").addClass("tu");
-            $("#0_-6").addClass("shuai");
-
-        }
-    }
 
     $('.squ-line').click(function (e) {
         console.log(e);
@@ -367,5 +328,44 @@
 
     });
 
+    //初始位置
+    function init(){
+        if (myColor == 0){
+            $("#0_0").addClass("diamond");
+            $("#0_1").addClass("jin0");
+            $("#0_2").addClass("mu0");
+            $("#0_3").addClass("shui0");
+            $("#0_4").addClass("huo0");
+            $("#0_5").addClass("tu0");
+            $("#0_6").addClass("shuai0");
+        } else {
+            $("#0_0").addClass("diamond");
+            $("#0_-1").addClass("jin");
+            $("#0_-2").addClass("mu");
+            $("#0_-3").addClass("shui");
+            $("#0_-4").addClass("huo");
+            $("#0_-5").addClass("tu");
+            $("#0_-6").addClass("shuai");
+        }
+    }
+    //初始对方位置
+    function initOtherChess(){
+        if (myColor == 1){
+            $("#0_1").addClass("jin0");
+            $("#0_2").addClass("mu0");
+            $("#0_3").addClass("shui0");
+            $("#0_4").addClass("huo0");
+            $("#0_5").addClass("tu0");
+            $("#0_6").addClass("shuai0");
+        } else {
+            $("#0_-1").addClass("jin");
+            $("#0_-2").addClass("mu");
+            $("#0_-3").addClass("shui");
+            $("#0_-4").addClass("huo");
+            $("#0_-5").addClass("tu");
+            $("#0_-6").addClass("shuai");
+
+        }
+    }
 </script>
 </html>
