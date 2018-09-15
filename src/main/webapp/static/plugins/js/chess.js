@@ -24,11 +24,11 @@ var chessSecondPoint = {
 var chessSecondClass;
 //是否释放技能
 var isSkill = 0;
-var skillj = 0;
-var skillm = 0;
-var skills = 0;
-var skillh = 0;
-var skillt = 0;
+var chessSkillj = 0;
+var chessSkillm = 0;
+var chessSkills = 0;
+var chessSkillh = 0;
+var chessSkillt = 0;
 
 //根据id获取坐标值
 function chessGetPosition(id) {
@@ -60,22 +60,33 @@ function chessPutSecondPoint(point) {
 }
 
 //判断是否可以走这里
-function chessCanMove(point, chessClass, isSkill) {
-    if (chessClass === chessFirstClass) {
-        //没放技能
-        if (!isSkill) {
-            //落点是否有我方棋子
-
-            //可以走
-            if (chessNoSkillCanMove(point)) {
-                //保存后续点轨迹
-                chessPutFirstTracePoint(point);
-                //移动棋子
-                chessMoveFirst();
-                //判断是否增加步数,true:增加
-                if (chessIsAddStep()) {
-                    myStep += 1;
-                }
+function chessCanMove(point, isSkill) {
+    //没放技能
+    if (!isSkill) {
+        //落点是否有我方棋子
+        //根据落点id,获取落点class
+        var pointClass = chessJudgePointById(point[0] + "_" + point[1]);
+        //落点有棋子
+        if (pointClass) {
+            //棋子是我方
+            if (chessJudgeMyChess(pointClass)) {
+                alert("此处有我方棋子");
+                return;
+            }
+        }
+        //可以走
+        if (chessNoSkillCanMove(point)) {
+            //保存后续点轨迹
+            chessPutFirstTracePoint(point);
+            //移动棋子
+            chessMoveFirst();
+            //水棋子步数加一
+            if (chessFirstClass === "shui") {
+                chessSkills += 1;
+            }
+            //判断是否增加步数,true:增加
+            if (chessIsAddStep()) {
+                myStep += 1;
             }
         }
     }
@@ -93,7 +104,7 @@ function chessIsAddStep() {
             ,
             idTop = chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + (parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]) + 1)
             ,
-            idBottom = chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + (parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]) -1 );
+            idBottom = chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + (parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]) - 1);
         //计算上下左右四个点放入数组
         var idList = [idLeft, idRight, idTop, idBottom];
         //循环数组获取是否id点有对方class
@@ -108,8 +119,13 @@ function chessIsAddStep() {
                 }
             }
         }
-        return true;
+    } else if (chessFirstClass === "shui" || chessFirstClass === "shui"){
+        //走一步后我方可以继续走
+        if (chessSkills == 1){
+            return false;
+        }
     }
+    return true;
 }
 
 //保存第一点轨迹
@@ -178,7 +194,7 @@ function chessJudgePoint(classList) {
 //根据id获取棋子样式
 function chessJudgePointById(id) {
     var cl = $("#" + id).attr("class");
-    if (!cl){
+    if (!cl) {
         return;
     }
     if (cl.indexOf(" ") <= 0) {
@@ -365,11 +381,15 @@ function chessMeStop() {
     chessFirstTrackY = new Array();
     chessSecondTrackX = new Array();
     chessSecondTrackY = new Array();
+    //初始化水步数
+    chessSkills = 0;
+    //走按钮变暗
+    $("#chessMeStop").attr("disabled",true);
 }
 
 //组装走步信息
 function chessAssembleMessage() {
-    var message = '{type:1,step:"' + (myStep + 1) + '",isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '"}';
+    var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '"}';
     return message;
 }
 

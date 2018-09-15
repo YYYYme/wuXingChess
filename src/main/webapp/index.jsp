@@ -16,6 +16,7 @@
             background-color: rgb(209,169,90);
         }
         .diamond{
+            background-image: url("./static/plugins/images/diamond.png");
             width:65px;
             height:65px;
         }
@@ -138,9 +139,7 @@
         <span id="-3_0" class="squ-line"></span>
         <span id="-2_0" class="squ-line"></span>
         <span id="-1_0" class="squ-line"></span>
-        <span id="0_0" class="squ-line">
-                    <img alt="" class="diamond" src="./static/plugins/images/diamond.png">
-        </span>
+        <span id="0_0" class="squ-line"></span>
         <span id="1_0" class="squ-line"></span>
         <span id="2_0" class="squ-line"></span>
         <span id="3_0" class="squ-line"></span>
@@ -251,6 +250,8 @@
             }
             //更新步数
             myStep = message.step;
+            //走按钮变亮
+            $("#chessMeStop").attr("disabled",false);
         }
 
     };
@@ -282,6 +283,7 @@
     //初始位置
     function init(){
         if (myColor == 0){
+            $("#0_0").addClass("diamond");
             $("#0_1").addClass("jin0");
             $("#0_2").addClass("mu0");
             $("#0_3").addClass("shui0");
@@ -289,6 +291,7 @@
             $("#0_5").addClass("tu0");
             $("#0_6").addClass("shuai0");
         } else {
+            $("#0_0").addClass("diamond");
             $("#0_-1").addClass("jin");
             $("#0_-2").addClass("mu");
             $("#0_-3").addClass("shui");
@@ -306,8 +309,6 @@
             $("#0_4").addClass("huo0");
             $("#0_5").addClass("tu0");
             $("#0_6").addClass("shuai0");
-            //todo
-            $("#1_-1").addClass("jin0");
         } else {
             $("#0_-1").addClass("jin");
             $("#0_-2").addClass("mu");
@@ -361,7 +362,7 @@
                 chessPutSkillPoint(point, classList);
             }
             //判断可不可以走这里
-            chessCanMove(point, chessFirstClass, false)
+            chessCanMove(point, false)
         }
 
     });
