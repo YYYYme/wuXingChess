@@ -179,12 +179,6 @@ function chessClearSecondPoint() {
     chessSecondPoint.y = INIT_VALUE;
 }
 
-//清空第二个点击保存点
-function chessClearSecondPoint() {
-    chessSecondPoint.x = 0;
-    chessSecondPoint.y = 0;
-}
-
 //判断点击点对应棋子样式
 function chessJudgePoint(classList) {
     var cl = '';
@@ -393,4 +387,8 @@ function chessTraceNoSkill(message) {
             $("#" + traceId).addClass(message.chessFirstClass);
         }
     }
+}
+//点击释放技能
+function chessReleaseSkill() {
+
 }
