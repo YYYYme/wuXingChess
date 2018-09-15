@@ -85,9 +85,11 @@ function chessCanMove(point, isSkill) {
             if (chessFirstClass === "shui") {
                 chessSkills += 1;
             }
-            //判断是否增加步数,true:增加
+            //判断是否增加步数,true:增加 false:减少,保证发送时为偶数,message里会+1变奇数
             if (chessIsAddStep()) {
                 myStep += 1;
+            } else {
+                myStep -= 1;
             }
         }
     }
