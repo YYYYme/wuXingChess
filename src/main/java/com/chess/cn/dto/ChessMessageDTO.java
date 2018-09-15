@@ -6,7 +6,7 @@ import java.util.List;
  * 消息类
  */
 public class ChessMessageDTO {
-    private String step;
+    private Integer step;
     private String isSkill;
     private String chessRoom;
     private String color;
@@ -32,11 +32,11 @@ public class ChessMessageDTO {
         this.type = type;
     }
 
-    public String getStep() {
+    public Integer getStep() {
         return step;
     }
 
-    public void setStep(String step) {
+    public void setStep(Integer step) {
         this.step = step;
     }
 

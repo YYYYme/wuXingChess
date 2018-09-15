@@ -209,7 +209,7 @@
     //1 红色
     myColor = desc;
     //红方先走
-    myStep = desc;
+    myStep = parseInt(desc);
     console.log(desc);
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
@@ -243,7 +243,14 @@
         }
         //收到对方走步
         if(message.type === 1){
+            //对方没放技能
+            if (message.isSkill == 0){
+                chessTraceNoSkill(message);
+            } else {
 
+            }
+            //更新步数
+            myStep = message.step;
         }
 
     };
@@ -299,6 +306,8 @@
             $("#0_4").addClass("huo0");
             $("#0_5").addClass("tu0");
             $("#0_6").addClass("shuai0");
+            //todo
+            $("#1_-1").addClass("jin0");
         } else {
             $("#0_-1").addClass("jin");
             $("#0_-2").addClass("mu");
@@ -306,6 +315,7 @@
             $("#0_-4").addClass("huo");
             $("#0_-5").addClass("tu");
             $("#0_-6").addClass("shuai");
+
         }
     }
 
@@ -316,6 +326,7 @@
             return;
         }
         if(myStep % 2 !== 1){
+            alert("未到我方走");
             return;
         }
         //获取点击点id,class
