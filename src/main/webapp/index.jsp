@@ -276,8 +276,7 @@
                         alert("此子已被对方束缚");
                         return;
                     }
-                    //保存class
-                    chessFirstClass = firstClass;
+                    //技能是否亮起
                     chessIsSkill();
                 } else {
                     return;
@@ -286,7 +285,7 @@
                 return;
             }
             //第一个有效点击点放入第一存点
-            chessPutFirstPoint(point);
+            chessPutFirstPoint(point, firstClass);
             return;
         } else{
             //释放技能

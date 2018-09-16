@@ -52,18 +52,22 @@ function chessIsFirst() {
     }
 }
 
-function chessPutFirstPoint(point) {
+function chessPutFirstPoint(point, firstClass) {
     firstPoint.x = point[0];
     firstPoint.y = point[1];
     chessFirstTrackX[0] = point[0];
     chessFirstTrackY[0] = point[1];
+    //class
+    chessFirstClass = firstClass;
 }
 
-function chessPutSecondPoint(point) {
+function chessPutSecondPoint(point, secondClass) {
     chessSecondPoint.x = point[0];
     chessSecondPoint.y = point[1];
     chessSecondTrackX[0] = point[0];
     chessSecondTrackY[0] = point[1];
+    //class
+    chessSecondClass = secondClass;
 }
 
 //判断是否可以走这里
@@ -83,6 +87,12 @@ function chessCanMove(point, isSkill) {
         }
         //可以走
         if (chessNoSkillCanMove(point)) {
+            //木释放技能后走动时清空束缚点
+            if (chessFirstClass === "mu" || chessFirstClass === "mu0"){
+                if (chessSkillm === 1){
+                    chessClearShuFuPoint();
+                }
+            }
             //保存后续点轨迹
             chessPutFirstTracePoint(point);
             //移动棋子
@@ -280,7 +290,19 @@ function chessPutSkillPoint(point, classList) {
         if (chessFirstClass === "tu" || chessFirstClass === "tu0"){
             //计算被传送棋子位置是否可以落子,落点应为被传送棋子的落点,保存轨迹
             if(chessDeliveryCanTrue(point)){
-
+                //删除起点,绘制落点
+                $("#"+firstPoint.x + "_" + firstPoint.y).removeClass(chessFirstClass);
+                $("#"+chessSecondPoint.x + "_" + chessSecondPoint.y).removeClass(chessSecondClass);
+                $("#"+chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + chessFirstTrackY[chessFirstTrackY.length - 1]).addClass(chessFirstClass);
+                $("#"+chessSecondTrackX[chessSecondTrackX.length - 1] + "_" + chessSecondTrackY[chessSecondTrackY.length - 1]).addClass(chessSecondClass);
+                //土技能已释放
+                chessSkillt = 1;
+                //释放技能按钮失效
+                chessSkillDark();
+                //更新步数
+                myStep += 1;
+                //可以走棋
+                chessWalkLight();
             }
         }
         return;
@@ -353,7 +375,7 @@ function chessPutSkillPoint(point, classList) {
             //计算是否可以传送
             if (chessCanDelivery(point)) {
                 //保存第二点
-                chessPutSecondPoint(point);
+                chessPutSecondPoint(point, cl);
             } else {
                 alert("此位置不可传送");
                 return;
