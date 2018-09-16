@@ -195,7 +195,7 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" disabled="true" onclick="chessReleaseSkill()"/>
+<input type="button" id="chessIsSkill" value="释放技能" disabled="false" onclick="chessReleaseSkill()"/>
 <input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
 </body>
 
