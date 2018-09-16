@@ -235,12 +235,12 @@
             if (message.isSkill == 0){
                 chessTraceNoSkill(message);
             } else {
-
+                chessTraceSkill(message);
             }
             //更新步数
             myStep = message.step;
             //走按钮变亮
-            chessWalkLight();
+            //chessWalkLight();
         }
 
     };
@@ -292,11 +292,11 @@
             if (isSkill === 1){
                 //填充释放技能后的棋子位置
                 chessPutSkillPoint(point, classList);
+            } else {
+                //判断可不可以走这里
+                chessCanMove(point, false)
             }
-            //判断可不可以走这里
-            chessCanMove(point, false)
         }
-
     });
 
     //连接发生错误的回调方法

@@ -93,6 +93,13 @@ function chessCanMove(point, isSkill) {
                     chessClearShuFuPoint();
                 }
             }
+            //水只能走两步
+            if (chessFirstClass === "shui" || chessFirstClass === "shui0"){
+                if (chessSkills === 2){
+                    alert('水只能走两步');
+                    return;
+                }
+            }
             //保存后续点轨迹
             chessPutFirstTracePoint(point);
             //移动棋子
@@ -111,6 +118,8 @@ function chessCanMove(point, isSkill) {
             } else {
                 myStep -= 1;
             }
+            //走按钮变亮
+            chessWalkLight();
         }
     }
 }
@@ -559,7 +568,34 @@ function chessTraceNoSkill(message) {
         }
     }
 }
+//收到消息对方放技能时描绘棋盘轨迹
+function chessTraceSkill(message) {
+    //获取第一个点id
+    var firstId = message.chessFirstPoint.x + "_" + message.chessFirstPoint.y;
+    //获取第二个点id
+    var secondId = message.chessSecondPoint.x + "_" + message.chessSecondPoint.y;
+    //对方释放束缚,把被束缚棋子加个样式
+    if (message.chessFirstClass === 'mu' || message.chessFirstClass === 'mu0') {
+        //secondId加样式
 
+        //todo 对方释放技能展示
+
+    } else if (message.chessFirstClass === 'huo' || message.chessFirstClass === 'huo0'){
+        //对方放火技能,让两个点消失
+        $("#"+firstId).removeClass(message.chessFirstClass);
+        $("#"+secondId).removeClass(message.chessSecondClass);
+        //todo 对方释放技能展示
+
+    } else if (message.chessFirstClass === 'tu' || message.chessFirstClass === 'tu0'){
+        //删除开始点,描绘结束点
+        $("#"+firstId).removeClass(message.chessFirstClass);
+        $("#"+secondId).removeClass(message.chessSecondClass);
+        $("#"+message.chessFirstTrackX[1] + "_" + message.chessFirstTrackY[1]).addClass(message.chessFirstClass);
+        $("#"+message.chessSecondTrackX[1] + "_" + message.chessSecondTrackY[1]).addClass(message.chessSecondClass);
+        //todo 对方释放技能展示
+
+    }
+}
 //点击释放技能
 function chessReleaseSkill() {
 
