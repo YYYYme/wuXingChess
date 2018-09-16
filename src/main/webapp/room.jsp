@@ -56,7 +56,7 @@
             success:function(data){  //这个方法会在服务器执行成功是被调用 ，参数result就是服务器返回的值(现在是json类型)
                 result = data;
             }
-        })
+        });
         return result;
     }
 </script>

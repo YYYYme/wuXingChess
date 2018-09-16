@@ -17,8 +17,7 @@
         }
         .diamond{
             background-image: url("./static/plugins/images/diamond.png");
-            width:65px;
-            height:65px;
+            background-size: 65px;
         }
         .jin{
             background-image: url("./static/plugins/images/jin.png");
@@ -220,16 +219,6 @@
         alert('当前浏览器 Not support websocket');
     }
 
-    //连接发生错误的回调方法
-    websocket.onerror = function () {
-        alert("WebSocket连接发生错误");
-    };
-
-    //连接成功建立的回调方法
-    websocket.onopen = function () {
-        setMessageInnerHTML("WebSocket连接成功");
-    };
-
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
         var message = eval('(' + event.data + ')');
@@ -256,6 +245,71 @@
 
     };
 
+    //点击格子时触发
+    $('.squ-line').click(function (e) {
+        console.log(e);
+        if (chessIsBegin === 0){
+            alert("没有对手加入房间");
+            return;
+        }
+        if(myStep % 2 !== 1){
+            alert("未到我方走");
+            return;
+        }
+        //获取点击点id,class
+        var id = e.target.id;
+        var classList = e.target.classList;
+
+        //根据id获取坐标值
+        var point = chessGetPosition(id);
+        //判断是否第一次有效点击
+        //第一存点为空
+        if (chessIsFirst()){
+            //判断点击处是否有棋子,返回对应class
+            var firstClass = chessJudgePoint(classList);
+            //有棋子
+            if (firstClass){
+                //点击点是我方棋子
+                if (chessJudgeMyChess(firstClass)){
+                    //点击点已被束缚
+                    if (point[0] === chessShuFuPoint.x && point[1] === chessShuFuPoint.y){
+                        alert("此子已被对方束缚");
+                        return;
+                    }
+                    //保存class
+                    chessFirstClass = firstClass;
+                    chessIsSkill();
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+            //第一个有效点击点放入第一存点
+            chessPutFirstPoint(point);
+            return;
+        } else{
+            //释放技能
+            if (isSkill === 1){
+                //填充释放技能后的棋子位置
+                chessPutSkillPoint(point, classList);
+            }
+            //判断可不可以走这里
+            chessCanMove(point, false)
+        }
+
+    });
+
+    //连接发生错误的回调方法
+    websocket.onerror = function () {
+        alert("WebSocket连接发生错误");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function () {
+        setMessageInnerHTML("WebSocket连接成功");
+    };
+
     //连接关闭的回调方法
     websocket.onclose = function () {
         setMessageInnerHTML("WebSocket连接关闭");
@@ -280,53 +334,6 @@
     function send(message) {
         websocket.send(message);
     }
-
-    $('.squ-line').click(function (e) {
-        console.log(e);
-        if (chessIsBegin === 0){
-            alert("没有对手加入房间");
-            return;
-        }
-        if(myStep % 2 !== 1){
-            alert("未到我方走");
-            return;
-        }
-        //获取点击点id,class
-        var id = e.target.id;
-        var classList = e.target.classList;
-
-        //根据id获取坐标值
-        var point = chessGetPosition(id);
-        //判断是否第一次有效点击
-        //第一存点为空
-        if (chessIsFirst()){
-            //判断点击处是否有棋子,返回对应class
-            var firstClass = chessJudgePoint(classList);
-            if (firstClass){
-                //判断点击是否是我方棋子
-                if (chessJudgeMyChess(firstClass)){
-                    chessFirstClass = firstClass;
-                    chessIsSkill();
-                } else {
-                    return;
-                }
-            } else {
-                return;
-            }
-            //第一个有效点击点放入第一存点
-            chessPutFirstPoint(point);
-            return;
-        } else{
-            //判断是否释放技能
-            if (isSkill === 1){
-                //填充释放技能后的棋子位置
-                chessPutSkillPoint(point, classList);
-            }
-            //判断可不可以走这里
-            chessCanMove(point, false)
-        }
-
-    });
 
     //初始位置
     function init(){

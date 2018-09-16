@@ -9,6 +9,12 @@ var firstPoint = {
     x: INIT_VALUE,
     y: INIT_VALUE
 };
+//束缚点
+var chessShuFuPoint = {
+    x: INIT_VALUE,
+    y: INIT_VALUE
+};
+
 //第一点样式
 var chessFirstClass;
 //第一个棋子操作X,Y轴轨迹,用于发送给对方
@@ -81,8 +87,12 @@ function chessCanMove(point, isSkill) {
             chessPutFirstTracePoint(point);
             //移动棋子
             chessMoveFirst();
+            //木并且已释放技能时,束缚点初始化
+            if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
+                chessClearShuFuPoint();
+            }
             //水棋子步数加一
-            if (chessFirstClass === "shui") {
+            if (chessFirstClass === "shui" || chessFirstClass === "shui0") {
                 chessSkills += 1;
             }
             //判断是否增加步数,true:增加 false:减少,保证发送时为偶数,message里会+1变奇数
@@ -182,6 +192,12 @@ function chessClearSecondPoint() {
     chessSecondPoint.y = INIT_VALUE;
 }
 
+//清空束缚点
+function chessClearShuFuPoint() {
+    chessShuFuPoint.x = INIT_VALUE;
+    chessShuFuPoint.y = INIT_VALUE;
+}
+
 //判断点击点对应棋子样式
 function chessJudgePoint(classList) {
     var cl = '';
@@ -276,6 +292,11 @@ function chessPutSkillPoint(point, classList) {
                 alert("不在束缚范围内");
                 return;
             }
+            //加入束缚点
+            chessShuFuPoint.x=point[0];
+            chessShuFuPoint.y=point[1];
+            //木技能已释放
+            chessSkillm = 1;
             //更新步数
             myStep += 1;
             //可以走棋
@@ -303,10 +324,36 @@ function chessPutSkillPoint(point, classList) {
             myStep += 1;
             //可以走棋
             chessWalkLight();
+        } else if(chessFirstClass === "tu" || chessFirstClass === "tu0"){
+            //第二个点击点class不是我方棋子
+            if (!chessJudgeMyChess(cl)) {
+                alert("只能传送我方棋子");
+                return;
+            }
+            //判断点击点class是否为老将
+            if (chessJudgeIsBoss(cl)) {
+                alert("不可以传送帅");
+                return;
+            }
+            //计算是否可以传送
+            if (chessCanDelivery(point)) {
+                //保存第二点
+                chessPutSecondPoint(point);
+            } else {
+                alert("此位置不可传送");
+                return;
+            }
+            //更新步数
+            myStep += 1;
+            //可以走棋
+            chessWalkLight();
         }
     }
 }
+//计算是否可以传送
+function chessCanDelivery(point) {
 
+}
 //计算是否可以燃烧
 function chessCanBorn(point) {
     //不在同一行或同一列
@@ -414,7 +461,7 @@ function chessMeStop() {
 
 //组装走步信息
 function chessAssembleMessage() {
-    var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '"}';
+    var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '",chessShuFuPoint:{x:' + chessShuFuPoint.x + ',y:' + chessShuFuPoint.y + '}';
     return message;
 }
 

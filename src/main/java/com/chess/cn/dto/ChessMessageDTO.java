@@ -19,10 +19,23 @@ public class ChessMessageDTO {
     private List<String> chessSecondTrackX;
     private List<String> chessSecondTrackY;
     /**
+     * 束缚点
+     */
+    private ChessPointDTO chessShuFuPoint;
+
+    /**
      * 传输类型
      * 0:开始游戏
      */
     private Integer type;
+
+    public ChessPointDTO getChessShuFuPoint() {
+        return chessShuFuPoint;
+    }
+
+    public void setChessShuFuPoint(ChessPointDTO chessShuFuPoint) {
+        this.chessShuFuPoint = chessShuFuPoint;
+    }
 
     public Integer getType() {
         return type;
