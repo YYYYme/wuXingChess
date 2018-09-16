@@ -223,7 +223,13 @@ function chessNoSkillCanMove(point, pointIsOther) {
                 var yMoveJ = Math.abs(parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]) - parseInt(point[1]));
                 if (xMoveJ <= 1 && yMoveJ <= 1 && xMoveJ != yMoveJ) {
                     return true;
+                } else {
+                    alert("不在金攻击范围");
+                    return;
                 }
+            } else {
+                alert("金只能连续吃");
+                return;
             }
         }
     }
