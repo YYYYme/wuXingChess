@@ -147,6 +147,12 @@ function chessPutFirstTracePoint(point) {
     chessFirstTrackY.push(point[1]);
 }
 
+//保存第二点轨迹
+function chessPutSecondTracePoint(point) {
+    chessSecondTrackX.push(point[0]);
+    chessSecondTrackY.push(point[1]);
+}
+
 //移动棋子
 function chessMoveFirst() {
     //删除上一点class
@@ -270,6 +276,13 @@ function chessPutSkillPoint(point, classList) {
     //点击处是否为空
     var cl = chessJudgePoint(classList);
     if (cl) {
+        //土释放技能点击完两个点后
+        if (chessFirstClass === "tu" || chessFirstClass === "tu0"){
+            //计算被传送棋子位置是否可以落子,落点应为被传送棋子的落点,保存轨迹
+            if(chessDeliveryCanTrue(point)){
+
+            }
+        }
         return;
     } else {
         //木技能
@@ -297,6 +310,8 @@ function chessPutSkillPoint(point, classList) {
             chessShuFuPoint.y=point[1];
             //木技能已释放
             chessSkillm = 1;
+            //释放技能按钮失效
+            chessSkillDark();
             //更新步数
             myStep += 1;
             //可以走棋
@@ -350,9 +365,42 @@ function chessPutSkillPoint(point, classList) {
         }
     }
 }
+//是否可以传送到这个位置,计算土是否可以落
+function chessDeliveryCanTrue(point){
+    //根据第一点和第二点计算角度差值
+    var xVal = firstPoint.x - chessSecondPoint.x;
+    var yVal = firstPoint.y - chessSecondPoint.y;
+    //计算土落点坐标
+    var xCoor = point[0] + xVal;
+    var yCoor = point[1] + yVal;
+    var tuId = xCoor + "_" + yCoor;
+    //判断是否为空
+    if(!chessJudgePointById(tuId)){
+        //判断是否在棋盘内
+        if(chessIsInChess(tuId)){
+            //保存轨迹
+            chessPutFirstTracePoint([xCoor, yCoor]);
+            chessPutSecondTracePoint(point);
+            return true;
+        }
+    }
+    return false;
+}
+//判断是否在棋盘内
+function chessIsInChess(id) {
+    var cl = $("#" + id).attr("class");
+    if (!cl) {
+        return false;
+    }
+    return true;
+}
 //计算是否可以传送
 function chessCanDelivery(point) {
-
+    //和束缚同样方法
+    if(chessCanShuFu(point)){
+        return true;
+    }
+    return false;
 }
 //计算是否可以燃烧
 function chessCanBorn(point) {
@@ -457,6 +505,8 @@ function chessMeStop() {
     chessSkills = 0;
     //走按钮变暗
     chessWalkDark();
+    //技能释放初始化
+    isSkill = 0;
 }
 
 //组装走步信息
