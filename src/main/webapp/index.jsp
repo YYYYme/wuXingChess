@@ -79,6 +79,12 @@
             width:65px;
             height:65px;
         }
+        .add-border{
+            border-top:2px solid #000;
+            border-bottom:2px solid #000;
+            border-left:2px solid #000;
+            border-right:2px solid #000;
+        }
     </style>
 </head>
 <body>
@@ -195,8 +201,8 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" disabled="false" onclick="chessReleaseSkill()"/>
-<input type="button" id="chessMeStop" value="走" onclick="chessMeStop()"/>
+<input type="button" id="chessIsSkill" value="释放技能" onclick="chessReleaseSkill()"/>
+<input type="button" id="chessMeStop" value="走" disabled="true" onclick="chessMeStop()"/>
 </body>
 
 <script type="text/javascript">
@@ -259,20 +265,19 @@
         //获取点击点id,class
         var id = e.target.id;
         var classList = e.target.classList;
-
+        //判断点击处是否有棋子,返回对应class
+        var firstClass = chessJudgePoint(classList);
         //根据id获取坐标值
         var point = chessGetPosition(id);
         //判断是否第一次有效点击
         //第一存点为空
         if (chessIsFirst()){
-            //判断点击处是否有棋子,返回对应class
-            var firstClass = chessJudgePoint(classList);
             //有棋子
             if (firstClass){
                 //点击点是我方棋子
                 if (chessJudgeMyChess(firstClass)){
                     //点击点已被束缚
-                    if (point[0] === chessShuFuPoint.x && point[1] === chessShuFuPoint.y){
+                    if (point[0] == chessShuFuPoint.x && point[1] == chessShuFuPoint.y){
                         alert("此子已被对方束缚");
                         return;
                     }
@@ -286,6 +291,8 @@
             }
             //第一个有效点击点放入第一存点
             chessPutFirstPoint(point, firstClass);
+            //加入第一点击点样式
+            chessAddCssForFirst(point[0], point[1]);
             return;
         } else{
             //释放技能
@@ -293,6 +300,29 @@
                 //填充释放技能后的棋子位置
                 chessPutSkillPoint(point, classList);
             } else {
+                //切换第一个操作点
+                if (chessFirstTrackX.length === 1){
+                    //有棋子
+                    if (firstClass) {
+                        //点击点是我方棋子
+                        if (chessJudgeMyChess(firstClass)) {
+                            //点击点已被束缚
+                            if (point[0] == chessShuFuPoint.x && point[1] == chessShuFuPoint.y) {
+                                alert("此子已被对方束缚");
+                                return;
+                            }
+                            //取消上个点击点样式
+                            chessRemoveCssForFirst(firstPoint.x, firstPoint.y);
+                            //更新第一点
+                            chessPutFirstPoint(point, firstClass);
+                            //加入点击样式
+                            chessAddCssForFirst(point[0], point[1]);
+                            //技能是否亮起
+                            chessIsSkill();
+                            return;
+                        }
+                    }
+                }
                 //判断可不可以走这里
                 chessCanMove(point, false)
             }
