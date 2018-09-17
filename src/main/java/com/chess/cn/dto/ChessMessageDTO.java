@@ -12,17 +12,30 @@ public class ChessMessageDTO {
     private String color;
     private ChessPointDTO chessFirstPoint;
     private String chessFirstClass;
-    private List<String> chessFirstTrackX;
-    private List<String> chessFirstTrackY;
+    private List<Integer> chessFirstTrackX;
+    private List<Integer> chessFirstTrackY;
     private ChessPointDTO chessSecondPoint;
     private String chessSecondClass;
-    private List<String> chessSecondTrackX;
-    private List<String> chessSecondTrackY;
+    private List<Integer> chessSecondTrackX;
+    private List<Integer> chessSecondTrackY;
+    /**
+     * 束缚点
+     */
+    private ChessPointDTO chessShuFuPoint;
+
     /**
      * 传输类型
      * 0:开始游戏
      */
     private Integer type;
+
+    public ChessPointDTO getChessShuFuPoint() {
+        return chessShuFuPoint;
+    }
+
+    public void setChessShuFuPoint(ChessPointDTO chessShuFuPoint) {
+        this.chessShuFuPoint = chessShuFuPoint;
+    }
 
     public Integer getType() {
         return type;
@@ -96,35 +109,35 @@ public class ChessMessageDTO {
         this.chessSecondClass = chessSecondClass;
     }
 
-    public List<String> getChessFirstTrackX() {
+    public List<Integer> getChessFirstTrackX() {
         return chessFirstTrackX;
     }
 
-    public void setChessFirstTrackX(List<String> chessFirstTrackX) {
+    public void setChessFirstTrackX(List<Integer> chessFirstTrackX) {
         this.chessFirstTrackX = chessFirstTrackX;
     }
 
-    public List<String> getChessFirstTrackY() {
+    public List<Integer> getChessFirstTrackY() {
         return chessFirstTrackY;
     }
 
-    public void setChessFirstTrackY(List<String> chessFirstTrackY) {
+    public void setChessFirstTrackY(List<Integer> chessFirstTrackY) {
         this.chessFirstTrackY = chessFirstTrackY;
     }
 
-    public List<String> getChessSecondTrackX() {
+    public List<Integer> getChessSecondTrackX() {
         return chessSecondTrackX;
     }
 
-    public void setChessSecondTrackX(List<String> chessSecondTrackX) {
+    public void setChessSecondTrackX(List<Integer> chessSecondTrackX) {
         this.chessSecondTrackX = chessSecondTrackX;
     }
 
-    public List<String> getChessSecondTrackY() {
+    public List<Integer> getChessSecondTrackY() {
         return chessSecondTrackY;
     }
 
-    public void setChessSecondTrackY(List<String> chessSecondTrackY) {
+    public void setChessSecondTrackY(List<Integer> chessSecondTrackY) {
         this.chessSecondTrackY = chessSecondTrackY;
     }
 }
