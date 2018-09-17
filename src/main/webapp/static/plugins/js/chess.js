@@ -14,7 +14,8 @@ var chessShuFuPoint = {
     x: INIT_VALUE,
     y: INIT_VALUE
 };
-
+//1:获胜
+var chessIsWin = 0;
 //第一点样式
 var chessFirstClass;
 //第一个棋子操作X,Y轴轨迹,用于发送给对方
@@ -40,6 +41,7 @@ var chessSkillt = 0;
 var chessOperateSkillm = 0;
 //水吃掉的棋子数量(两步只能吃一个)
 var chessWalterEat = 0;
+
 //根据id获取坐标值
 function chessGetPosition(id) {
     var point = id.split("_");
@@ -94,18 +96,18 @@ function chessCanMove(point, isSkill) {
         //可以走
         if (chessNoSkillCanMove(point, pointIsOther)) {
             //木释放技能后走动时清空束缚点
-            if (chessFirstClass === "mu" || chessFirstClass === "mu0"){
-                if (chessSkillm === 1){
+            if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
+                if (chessSkillm === 1) {
                     chessClearShuFuPoint();
                 }
             }
             //水只能走两步
-            if (chessFirstClass === "shui" || chessFirstClass === "shui0"){
-                if (pointIsOther && chessWalterEat === 1){
+            if (chessFirstClass === "shui" || chessFirstClass === "shui0") {
+                if (pointIsOther && chessWalterEat === 1) {
                     alert('水只能吃一个棋子');
                     return;
                 }
-                if (chessSkills === 2){
+                if (chessSkills === 2) {
                     alert('水只能走两步');
                     return;
                 }
@@ -122,7 +124,7 @@ function chessCanMove(point, isSkill) {
             if (chessFirstClass === "shui" || chessFirstClass === "shui0") {
                 chessSkills += 1;
                 //水棋子吃数加一
-                if (pointIsOther){
+                if (pointIsOther) {
                     chessWalterEat++;
                 }
             }
@@ -139,7 +141,7 @@ function chessCanMove(point, isSkill) {
 //判断是否增加步数
 function chessIsAddStep(pointIsOther) {
     //落点没对方棋子时,金不可以继续走
-    if (pointIsOther){
+    if (pointIsOther) {
         //金,上下左右有对方棋子时不增加
         if (chessFirstClass === "jin" || chessFirstClass === "jin0") {
             //获取落点id
@@ -214,17 +216,24 @@ function chessRemoveOtherClass(id) {
 
 //判断没放技能时下一步是否可以走这里,不考虑落点是否有我方棋子,pointIsOther:bool类型,true:是对方棋子
 function chessNoSkillCanMove(point, pointIsOther) {
+    //是否获胜
+    if (chessWin(point)) {
+        chessIsWin = 1;
+        chessAssembleMessage();
+        alert("你赢了");
+        return;
+    }
     //是否非帅走的中心
     if (chessJudgeIsInDiamond(point[0], point[1])) {
         alert("只有帅可以获取钻石");
         return;
     }
     //金后续连踩需要根据轨迹点判断
-    if (chessFirstClass === "jin" || chessFirstClass === "jin0"){
+    if (chessFirstClass === "jin" || chessFirstClass === "jin0") {
         //第一次落子不需要判断是否是对方棋子
-        if(chessFirstTrackX.length !== 1){
+        if (chessFirstTrackX.length !== 1) {
             //有对方棋子
-            if (pointIsOther){
+            if (pointIsOther) {
                 //判断是否在攻击范围
                 var xMoveJ = Math.abs(parseInt(chessFirstTrackX[chessFirstTrackX.length - 1]) - parseInt(point[0]));
                 var yMoveJ = Math.abs(parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]) - parseInt(point[1]));
@@ -243,6 +252,22 @@ function chessNoSkillCanMove(point, pointIsOther) {
     var xMove = Math.abs(parseInt(point[0]) - parseInt(chessFirstTrackX[chessFirstTrackX.length - 1]));
     var yMove = Math.abs(parseInt(point[1]) - parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]));
     if (xMove <= 1 && yMove <= 1 && xMove != yMove) {
+        return true;
+    }
+    return false;
+}
+
+//获胜
+function chessWin(point) {
+    if (point[0] == 0 && point[1] == 0 && (chessFirstClass === "shuai" || chessFirstClass === "shuai0")) {
+        //保存轨迹
+        chessPutFirstTracePoint(point);
+        return true;
+    }
+    var cl = chessJudgePointById(point[0]+"_"+point[1]);
+    if (cl === "shuai" || cl === "shuai0"){
+        //保存轨迹
+        chessPutFirstTracePoint(point);
         return true;
     }
     return false;
@@ -339,14 +364,14 @@ function chessPutSkillPoint(point, classList) {
     var cl = chessJudgePoint(classList);
     if (!cl) {
         //土释放技能点击落点时
-        if (chessFirstClass === "tu" || chessFirstClass === "tu0"){
+        if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
             //计算被传送棋子位置是否可以落子,落点应为被传送棋子的落点,保存轨迹
-            if(chessDeliveryCanTrue(point)){
+            if (chessDeliveryCanTrue(point)) {
                 //删除起点,绘制落点
-                $("#"+firstPoint.x + "_" + firstPoint.y).removeClass(chessFirstClass);
-                $("#"+chessSecondPoint.x + "_" + chessSecondPoint.y).removeClass(chessSecondClass);
-                $("#"+chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + chessFirstTrackY[chessFirstTrackY.length - 1]).addClass(chessFirstClass);
-                $("#"+chessSecondTrackX[chessSecondTrackX.length - 1] + "_" + chessSecondTrackY[chessSecondTrackY.length - 1]).addClass(chessSecondClass);
+                $("#" + firstPoint.x + "_" + firstPoint.y).removeClass(chessFirstClass);
+                $("#" + chessSecondPoint.x + "_" + chessSecondPoint.y).removeClass(chessSecondClass);
+                $("#" + chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + chessFirstTrackY[chessFirstTrackY.length - 1]).addClass(chessFirstClass);
+                $("#" + chessSecondTrackX[chessSecondTrackX.length - 1] + "_" + chessSecondTrackY[chessSecondTrackY.length - 1]).addClass(chessSecondClass);
                 //落点加边框
                 chessAddCssForFirst(chessFirstTrackX[chessFirstTrackX.length - 1], chessFirstTrackY[chessFirstTrackY.length - 1]);
                 chessAddCssForFirst(chessSecondTrackX[chessSecondTrackX.length - 1], chessSecondTrackY[chessSecondTrackY.length - 1]);
@@ -388,8 +413,8 @@ function chessPutSkillPoint(point, classList) {
                 return;
             }
             //加入束缚点
-            chessShuFuPoint.x=point[0];
-            chessShuFuPoint.y=point[1];
+            chessShuFuPoint.x = point[0];
+            chessShuFuPoint.y = point[1];
             //木技能已释放
             chessSkillm = 1;
             //释放技能按钮失效
@@ -424,8 +449,8 @@ function chessPutSkillPoint(point, classList) {
             //火技能已释放
             chessSkillh = 1;
             //删除燃烧掉的点
-            $("#"+firstPoint.x+"_"+firstPoint.y).removeClass(chessFirstClass);
-            $("#"+point[0]+"_"+point[1]).removeClass(chessSecondClass);
+            $("#" + firstPoint.x + "_" + firstPoint.y).removeClass(chessFirstClass);
+            $("#" + point[0] + "_" + point[1]).removeClass(chessSecondClass);
             //取消点击处边框样式
             chessRemoveCssForFirst(chessFirstTrackX[chessFirstTrackX.length - 1], chessFirstTrackY[chessFirstTrackY.length - 1]);
             //更新步数
@@ -434,7 +459,7 @@ function chessPutSkillPoint(point, classList) {
             chessWalkLight();
             //todo 增加火已释放文字
 
-        } else if(chessFirstClass === "tu" || chessFirstClass === "tu0"){
+        } else if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
             //第二个点击点class不是我方棋子
             if (!chessJudgeMyChess(cl)) {
                 alert("只能传送我方棋子");
@@ -458,8 +483,9 @@ function chessPutSkillPoint(point, classList) {
         }
     }
 }
+
 //是否可以传送到这个位置,计算土是否可以落
-function chessDeliveryCanTrue(point){
+function chessDeliveryCanTrue(point) {
     //根据第一点和第二点计算角度差值
     var xVal = firstPoint.x - chessSecondPoint.x;
     var yVal = firstPoint.y - chessSecondPoint.y;
@@ -468,9 +494,9 @@ function chessDeliveryCanTrue(point){
     var yCoor = parseInt(point[1]) + yVal;
     var tuId = xCoor + "_" + yCoor;
     //判断是否为空
-    if(!chessJudgePointById(tuId)){
+    if (!chessJudgePointById(tuId)) {
         //判断是否在棋盘内
-        if(chessIsInChess(tuId)){
+        if (chessIsInChess(tuId)) {
             //保存轨迹
             chessPutFirstTracePoint([xCoor, yCoor]);
             chessPutSecondTracePoint(point);
@@ -479,6 +505,7 @@ function chessDeliveryCanTrue(point){
     }
     return false;
 }
+
 //判断是否在棋盘内
 function chessIsInChess(id) {
     var cl = $("#" + id).attr("class");
@@ -487,14 +514,16 @@ function chessIsInChess(id) {
     }
     return true;
 }
+
 //计算是否可以传送
 function chessCanDelivery(point) {
     //和束缚同样方法
-    if(chessCanShuFu(point)){
+    if (chessCanShuFu(point)) {
         return true;
     }
     return false;
 }
+
 //计算是否可以燃烧
 function chessCanBorn(point) {
     //不在同一行或同一列
@@ -509,7 +538,7 @@ function chessCanBorn(point) {
         return false;
     }
     //中间有其它棋子
-    if(!chessJudgeBetween(firstPoint, point)){
+    if (!chessJudgeBetween(firstPoint, point)) {
         return false;
     }
     return true;
@@ -530,7 +559,7 @@ function chessJudgeBetween(firstPoint, point) {
         for (var i = m1 + 1; i < m2; i++) {
             var id = firstPoint.x + "_" + i;
             var cl = chessJudgePointById(id);
-            if (!cl){
+            if (!cl) {
                 return true;
             }
         }
@@ -545,7 +574,7 @@ function chessJudgeBetween(firstPoint, point) {
         for (var i = m1 + 1; i < m2; i++) {
             var id = i + "_" + firstPoint;
             var cl = chessJudgePointById(id);
-            if (!cl){
+            if (!cl) {
                 return true;
             }
         }
@@ -590,7 +619,7 @@ function chessJudgeIsBoss(cl) {
 function chessMeStop() {
     //水只走一步时步数加一
     if (chessFirstClass === "shui" || chessFirstClass === "shui0") {
-        if (chessSkills === 1){
+        if (chessSkills === 1) {
             myStep++;
         }
     }
@@ -622,7 +651,16 @@ function chessMeStop() {
 
 //组装走步信息
 function chessAssembleMessage() {
-    var message = '{type:1,step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '",chessShuFuPoint:{x:' + chessShuFuPoint.x + ',y:' + chessShuFuPoint.y + '}}';
+    var type = 1;
+    //获胜type:2
+    if (chessIsWin === 1) {
+        type = 2;
+    }
+    //认输
+    if (chessIsWin === 2) {
+        type = 3;
+    }
+    var message = '{type:' + type + ',step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '",chessShuFuPoint:{x:' + chessShuFuPoint.x + ',y:' + chessShuFuPoint.y + '}}';
     return message;
 }
 
@@ -637,8 +675,8 @@ function chessJudgeIsInDiamond(x, y) {
 //收到消息对方未放技能时描绘棋盘轨迹
 function chessTraceNoSkill(message) {
     //木释放技能后走动时清空束缚点
-    if (message.chessFirstClass === "mu" || message.chessFirstClass === "mu0"){
-        if (chessOperateSkillm === 1){
+    if (message.chessFirstClass === "mu" || message.chessFirstClass === "mu0") {
+        if (chessOperateSkillm === 1) {
             //撤销束缚样式
             var shuFuId = chessShuFuPoint.x + "_" + chessShuFuPoint.y;
 
@@ -657,13 +695,14 @@ function chessTraceNoSkill(message) {
             //增加移动棋子样式
             $("#" + traceId).addClass(message.chessFirstClass);
             //不是最后一组轨迹则删除样式
-            if (i != message.chessFirstTrackX.length - 1){
+            if (i != message.chessFirstTrackX.length - 1) {
                 sleep(500);
                 $("#" + traceId).removeClass(message.chessFirstClass);
             }
         }
     }
 }
+
 //休眠毫秒
 function sleep(numberMillis) {
     var now = new Date();
@@ -674,6 +713,7 @@ function sleep(numberMillis) {
             return;
     }
 }
+
 //收到消息对方放技能时描绘棋盘轨迹
 function chessTraceSkill(message) {
     //获取第一个点id
@@ -691,33 +731,41 @@ function chessTraceSkill(message) {
 
         //todo 对方释放技能展示
 
-    } else if (message.chessFirstClass === 'huo' || message.chessFirstClass === 'huo0'){
+    } else if (message.chessFirstClass === 'huo' || message.chessFirstClass === 'huo0') {
         //对方放火技能,让两个点消失
-        $("#"+firstId).removeClass(message.chessFirstClass);
-        $("#"+secondId).removeClass(message.chessSecondClass);
+        $("#" + firstId).removeClass(message.chessFirstClass);
+        $("#" + secondId).removeClass(message.chessSecondClass);
         //todo 对方释放技能展示
 
-    } else if (message.chessFirstClass === 'tu' || message.chessFirstClass === 'tu0'){
+    } else if (message.chessFirstClass === 'tu' || message.chessFirstClass === 'tu0') {
         //删除开始点,描绘结束点
-        $("#"+firstId).removeClass(message.chessFirstClass);
-        $("#"+secondId).removeClass(message.chessSecondClass);
-        $("#"+message.chessFirstTrackX[1] + "_" + message.chessFirstTrackY[1]).addClass(message.chessFirstClass);
-        $("#"+message.chessSecondTrackX[1] + "_" + message.chessSecondTrackY[1]).addClass(message.chessSecondClass);
+        $("#" + firstId).removeClass(message.chessFirstClass);
+        $("#" + secondId).removeClass(message.chessSecondClass);
+        $("#" + message.chessFirstTrackX[1] + "_" + message.chessFirstTrackY[1]).addClass(message.chessFirstClass);
+        $("#" + message.chessSecondTrackX[1] + "_" + message.chessSecondTrackY[1]).addClass(message.chessSecondClass);
         //todo 对方释放技能展示
 
     }
 }
+
 //点击释放技能
 function chessReleaseSkill() {
     isSkill = 1;
 }
+
 //加入点击点样式
-function chessAddCssForFirst(x, y){
+function chessAddCssForFirst(x, y) {
     var clickId = x + "_" + y;
-    $("#"+clickId).addClass("add-border");
+    $("#" + clickId).addClass("add-border");
 }
+
 //取消点击点样式
-function chessRemoveCssForFirst(x, y){
+function chessRemoveCssForFirst(x, y) {
     var removeId = x + "_" + y;
-    $("#"+removeId).removeClass("add-border");
+    $("#" + removeId).removeClass("add-border");
+}
+//认输
+function chessFail() {
+    chessIsWin = 2;
+    chessAssembleMessage();
 }

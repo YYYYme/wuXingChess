@@ -203,6 +203,10 @@
 </div>
 <input type="button" id="chessIsSkill" value="释放技能" onclick="chessReleaseSkill()"/>
 <input type="button" id="chessMeStop" value="走" disabled="true" onclick="chessMeStop()"/>
+<input type="button" id="chessReset" value="重走"  onclick="chessReset()"/>
+<input type="button" id="chessRegret" value="悔棋"  onclick="chessRegret()"/>
+<input type="button" id="chessPease" value="求和"  onclick="chessPease()"/>
+<input type="button" id="chessFail" value="认输" onclick="chessFail()"/>
 </body>
 
 <script type="text/javascript">
@@ -245,10 +249,19 @@
             }
             //更新步数
             myStep = message.step;
-            //走按钮变亮
-            //chessWalkLight();
         }
-
+        //收到对方胜利
+        if(message.type === 2){
+            alert("对方获胜");
+            //todo
+            return;
+        }
+        //收到对方认输
+        if(message.type === 3){
+            alert("对方认输");
+            //todo 初始化,刷新是否可行?
+            return;
+        }
     };
 
     //点击格子时触发
