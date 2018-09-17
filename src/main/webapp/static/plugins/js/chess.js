@@ -29,7 +29,7 @@ var chessSecondPoint = {
     x: INIT_VALUE,
     y: INIT_VALUE
 };
-var chessSecondClass;
+var chessSecondClass = '';
 //是否释放技能
 var isSkill = 0;
 var chessSkillj = 0;
@@ -559,8 +559,8 @@ function chessJudgeBetween(firstPoint, point) {
         for (var i = m1 + 1; i < m2; i++) {
             var id = firstPoint.x + "_" + i;
             var cl = chessJudgePointById(id);
-            if (!cl) {
-                return true;
+            if (cl) {
+                return false;
             }
         }
     } else {
@@ -574,8 +574,8 @@ function chessJudgeBetween(firstPoint, point) {
         for (var i = m1 + 1; i < m2; i++) {
             var id = i + "_" + firstPoint;
             var cl = chessJudgePointById(id);
-            if (!cl) {
-                return true;
+            if (cl) {
+                return false;
             }
         }
     }
@@ -768,4 +768,31 @@ function chessRemoveCssForFirst(x, y) {
 function chessFail() {
     chessIsWin = 2;
     chessAssembleMessage();
+}
+//翻转棋盘
+function chessTurn(message) {
+    message.chessFirstPoint.x = message.chessFirstPoint.x * -1;
+    message.chessFirstPoint.y = message.chessFirstPoint.y * -1;
+    if (message.chessSecondPoint.x !== 99){
+        message.chessSecondPoint.x = message.chessSecondPoint.x * -1;
+        message.chessSecondPoint.y = message.chessSecondPoint.y * -1;
+    }
+    if (message.chessShuFuPoint.x !== 99){
+        message.chessShuFuPoint.x = message.chessShuFuPoint.x * -1;
+        message.chessShuFuPoint.y = message.chessShuFuPoint.y * -1;
+    }
+    message.chessFirstTrackX = chessTurnTrace(message.chessFirstTrackX);
+    message.chessFirstTrackY = chessTurnTrace(message.chessFirstTrackY);
+    if (message.chessSecondTrackX.length > 0) {
+        message.chessSecondTrackX = chessTurnTrace(message.chessSecondTrackX);
+        message.chessSecondTrackY = chessTurnTrace(message.chessSecondTrackY);
+    }
+    return message;
+}
+//翻转轨迹
+function chessTurnTrace(trace) {
+    for (var i = 0; i< trace.length;i++) {
+        trace[i] = trace[i] * -1;
+    }
+    return trace;
 }

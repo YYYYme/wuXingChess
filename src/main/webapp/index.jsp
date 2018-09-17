@@ -223,6 +223,7 @@
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/websocket?roomName="+ roomName+"&color="+myColor);
+        //初始化我放位置
         init();
     }
     else {
@@ -241,6 +242,8 @@
         }
         //收到对方走步
         if(message.type === 1){
+            //翻转棋盘
+            message = chessTurn(message);
             //对方没放技能
             if (message.isSkill == 0){
                 chessTraceNoSkill(message);
@@ -379,16 +382,16 @@
         websocket.send(message);
     }
 
-    //初始位置
+    //初始我方位置
     function init(){
         if (myColor == 0){
             $("#0_0").addClass("diamond");
-            $("#0_1").addClass("jin0");
-            $("#0_2").addClass("mu0");
-            $("#0_3").addClass("shui0");
-            $("#0_4").addClass("huo0");
-            $("#0_5").addClass("tu0");
-            $("#0_6").addClass("shuai0");
+            $("#0_-1").addClass("jin0");
+            $("#0_-2").addClass("mu0");
+            $("#0_-3").addClass("shui0");
+            $("#0_-4").addClass("huo0");
+            $("#0_-5").addClass("tu0");
+            $("#0_-6").addClass("shuai0");
         } else {
             $("#0_0").addClass("diamond");
             $("#0_-1").addClass("jin");
@@ -409,13 +412,12 @@
             $("#0_5").addClass("tu0");
             $("#0_6").addClass("shuai0");
         } else {
-            $("#0_-1").addClass("jin");
-            $("#0_-2").addClass("mu");
-            $("#0_-3").addClass("shui");
-            $("#0_-4").addClass("huo");
-            $("#0_-5").addClass("tu");
-            $("#0_-6").addClass("shuai");
-
+            $("#0_1").addClass("jin");
+            $("#0_2").addClass("mu");
+            $("#0_3").addClass("shui");
+            $("#0_4").addClass("huo");
+            $("#0_5").addClass("tu");
+            $("#0_6").addClass("shuai");
         }
     }
 </script>
