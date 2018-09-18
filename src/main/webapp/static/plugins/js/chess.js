@@ -606,45 +606,87 @@ function chessIsSkill() {
             //周围一圈是否有我方棋子
             if (chessExistClassAround(firstPoint.x, firstPoint.y, true)) {
                 chessSkillLight();
+                return;
             }
         } else if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
             //todo 横向或纵向是否有对方棋子
             if(chessHaveCanBornClass()){
                 chessSkillLight();
+                return;
             }
         } else if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
             //周围一圈是否有对方棋子
             if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
                 chessSkillLight();
+                return;
             }
         }
     }
+    chessSkillDark();
 }
 //横向或纵向是否有可燃烧的对方棋子
 function chessHaveCanBornClass() {
     var x = firstPoint.x;
     var y = firstPoint.y;
     //横向
-    for (var i = x - 10;i< x+10;i++){
+    for (var i = x;i< x+10;i++){
         var id = i + "_" + y;
         var cl = chessJudgePointById(id);
         if (cl){
             if (!chessJudgeIsBoss(cl)) {
-                if(chessJudgeMyChess(cl)){
+                if(!chessJudgeMyChess(cl)){
                     return true;
+                } else {
+                    return false;
                 }
+            } else {
+                return false;
+            }
+        }
+    }
+    for (var i = x;i> x - 10;i--){
+        var id = i + "_" + y;
+        var cl = chessJudgePointById(id);
+        if (cl){
+            if (!chessJudgeIsBoss(cl)) {
+                if(!chessJudgeMyChess(cl)){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
             }
         }
     }
     //纵向
-    for (var j = y - 10;j< y+10;j++){
+    for (var j = y;j< y+10;j++){
         var idZong = x + "_" + j;
         var clZong = chessJudgePointById(idZong);
         if (clZong){
             if (!chessJudgeIsBoss(clZong)) {
-                if(chessJudgeMyChess(clZong)){
+                if(!chessJudgeMyChess(clZong)){
                     return true;
+                } else {
+                    return false;
                 }
+            } else {
+                return false;
+            }
+        }
+    }
+    for (var j = y;j> y-10;j--){
+        var idZong = x + "_" + j;
+        var clZong = chessJudgePointById(idZong);
+        if (clZong){
+            if (!chessJudgeIsBoss(clZong)) {
+                if(!chessJudgeMyChess(clZong)){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
             }
         }
     }
@@ -665,7 +707,7 @@ function chessExistClassAround(x, y, myClass) {
     var idArray = [id1, id2, id3, id4, id5, id6, id7, id8];
     var cl = '';
     for (var i = 0; i < idArray.length; i++) {
-        cl = chessJudgePointById(id);
+        cl = chessJudgePointById(idArray[i]);
         if (cl) {
             if (!chessJudgeIsBoss(cl)) {
                 if (chessJudgeMyChess(cl) === myClass) {
