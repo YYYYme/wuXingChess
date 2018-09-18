@@ -42,7 +42,7 @@ var chessOperateSkillm = 0;
 //水吃掉的棋子数量(两步只能吃一个)
 var chessWalterEat = 0;
 //删除点记录
-var deleteClass = new Array();
+var chessDeleteClass = new Array();
 var chessDeleteTrackX = new Array();
 var chessDeleteTrackY = new Array();
 
@@ -77,6 +77,13 @@ function chessPutSecondPoint(point, secondClass) {
     chessSecondTrackY[0] = point[1];
     //class
     chessSecondClass = secondClass;
+}
+
+//保存删除点
+function chessSaveDelete(point, pointClass) {
+    chessDeleteTrackX.push(point[0]);
+    chessDeleteTrackY.push(point[1]);
+    chessDeleteClass = pointClass;
 }
 
 //判断是否可以走这里
@@ -118,6 +125,10 @@ function chessCanMove(point, isSkill) {
             }
             //保存后续点轨迹
             chessPutFirstTracePoint(point);
+            if (pointIsOther) {
+                //保存被吃掉的棋子
+                chessSaveDelete(point, pointClass);
+            }
             //移动棋子
             chessMoveFirst();
             //木并且已释放技能时,束缚点初始化
@@ -268,8 +279,8 @@ function chessWin(point) {
         chessPutFirstTracePoint(point);
         return true;
     }
-    var cl = chessJudgePointById(point[0]+"_"+point[1]);
-    if (cl === "shuai" || cl === "shuai0"){
+    var cl = chessJudgePointById(point[0] + "_" + point[1]);
+    if (cl === "shuai" || cl === "shuai0") {
         //保存轨迹
         chessPutFirstTracePoint(point);
         return true;
@@ -419,6 +430,8 @@ function chessPutSkillPoint(point, classList) {
             //加入束缚点
             chessShuFuPoint.x = point[0];
             chessShuFuPoint.y = point[1];
+            //加入边框
+            chessAddCssForFirst(point[0], point[1]);
             //木技能已释放
             chessSkillm = 1;
             //释放技能按钮失效
@@ -583,12 +596,87 @@ function chessJudgeBetween(firstPoint, point) {
             }
         }
     }
-    return false;
+    return true;
 }
 
 //是否可以释放技能,点我方棋子时控制按钮是否亮起
 function chessIsSkill() {
-
+    if (chessSkillm !== 1) {
+        if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
+            //周围一圈是否有我方棋子
+            if (chessExistClassAround(firstPoint.x, firstPoint.y, true)) {
+                chessSkillLight();
+            }
+        } else if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
+            //todo 横向或纵向是否有对方棋子
+            if(chessHaveCanBornClass()){
+                chessSkillLight();
+            }
+        } else if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
+            //周围一圈是否有对方棋子
+            if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
+                chessSkillLight();
+            }
+        }
+    }
+}
+//横向或纵向是否有可燃烧的对方棋子
+function chessHaveCanBornClass() {
+    var x = firstPoint.x;
+    var y = firstPoint.y;
+    //横向
+    for (var i = x - 10;i< x+10;i++){
+        var id = i + "_" + y;
+        var cl = chessJudgePointById(id);
+        if (cl){
+            if (!chessJudgeIsBoss(cl)) {
+                if(chessJudgeMyChess(cl)){
+                    return true;
+                }
+            }
+        }
+    }
+    //纵向
+    for (var j = y - 10;j< y+10;j++){
+        var idZong = x + "_" + j;
+        var clZong = chessJudgePointById(idZong);
+        if (clZong){
+            if (!chessJudgeIsBoss(clZong)) {
+                if(chessJudgeMyChess(clZong)){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+//判断周围一圈是否有我方/对方棋子,myClass:true 我方
+function chessExistClassAround(x, y, myClass) {
+    var xp = parseInt(x);
+    var yp = parseInt(y);
+    var id1 = (xp - 1) + "_" + (yp - 1);
+    var id2 = (xp - 0) + "_" + (yp - 1);
+    var id3 = (xp + 1) + "_" + (yp - 1);
+    var id4 = (xp - 1) + "_" + (yp - 0);
+    var id5 = (xp + 1) + "_" + (yp - 0);
+    var id6 = (xp - 1) + "_" + (yp + 1);
+    var id7 = (xp - 0) + "_" + (yp + 1);
+    var id8 = (xp + 1) + "_" + (yp + 1);
+    var idArray = [id1, id2, id3, id4, id5, id6, id7, id8];
+    var cl = '';
+    for (var i = 0; i < idArray.length; i++) {
+        cl = chessJudgePointById(id);
+        if (cl) {
+            if (!chessJudgeIsBoss(cl)) {
+                if (chessJudgeMyChess(cl) === myClass) {
+                    return true;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 //技能释放按钮亮起
@@ -611,7 +699,7 @@ function chessWalkDark() {
     $("#chessMeStop").attr("disabled", true);
 }
 
-//是否为老将
+//判断是否为老将
 function chessJudgeIsBoss(cl) {
     if (cl === "shuai" || cl === "shuai0") {
         return true;
@@ -707,7 +795,7 @@ function chessTraceNoSkill(message) {
     }
 }
 
-//休眠毫秒
+//todo 休眠毫秒
 function sleep(numberMillis) {
     var now = new Date();
     var exitTime = now.getTime() + numberMillis;
@@ -755,9 +843,11 @@ function chessTraceSkill(message) {
 //点击释放技能
 function chessReleaseSkill() {
     isSkill = 1;
+    //变暗
+    chessSkillDark();
 }
 
-//加入点击点样式
+//加入点击边框样式
 function chessAddCssForFirst(x, y) {
     var clickId = x + "_" + y;
     $("#" + clickId).addClass("add-border");
@@ -768,20 +858,22 @@ function chessRemoveCssForFirst(x, y) {
     var removeId = x + "_" + y;
     $("#" + removeId).removeClass("add-border");
 }
+
 //认输
 function chessFail() {
     chessIsWin = 2;
     chessAssembleMessage();
 }
+
 //翻转棋盘
 function chessTurn(message) {
     message.chessFirstPoint.x = message.chessFirstPoint.x * -1;
     message.chessFirstPoint.y = message.chessFirstPoint.y * -1;
-    if (message.chessSecondPoint.x !== 99){
+    if (message.chessSecondPoint.x !== 99) {
         message.chessSecondPoint.x = message.chessSecondPoint.x * -1;
         message.chessSecondPoint.y = message.chessSecondPoint.y * -1;
     }
-    if (message.chessShuFuPoint.x !== 99){
+    if (message.chessShuFuPoint.x !== 99) {
         message.chessShuFuPoint.x = message.chessShuFuPoint.x * -1;
         message.chessShuFuPoint.y = message.chessShuFuPoint.y * -1;
     }
@@ -793,38 +885,89 @@ function chessTurn(message) {
     }
     return message;
 }
+
 //翻转轨迹
 function chessTurnTrace(trace) {
-    for (var i = 0; i< trace.length;i++) {
+    for (var i = 0; i < trace.length; i++) {
         trace[i] = trace[i] * -1;
     }
     return trace;
 }
+
 //重走
 function chessReset() {
-    if (chessIsBegin === 0){
+    if (chessIsBegin === 0) {
         return;
     }
-    if(myStep % 2 !== 1){
+    if (myStep % 2 !== 1) {
         //判断走是亮着的
-        var goDis = $("#chessMeStop").prop("disabled") ;
+        var goDis = $("#chessMeStop").prop("disabled");
         if (goDis) {
             return;
         }
     }
     //删除最后的位置
-    $("#"+chessFirstTrackX[chessFirstTrackX.length - 1] + "_" +chessFirstTrackY[chessFirstTrackY.length - 1]).removeClass(chessFirstClass);
-    if (chessSecondClass) {
-        $("#"+chessSecondTrackX[chessSecondTrackX.length - 1] + "_" +chessSecondTrackY[chessSecondTrackY.length - 1]).removeClass(chessSecondClass);
-    }
+    $("#" + chessFirstTrackX[chessFirstTrackX.length - 1] + "_" + chessFirstTrackY[chessFirstTrackY.length - 1]).removeClass(chessFirstClass);
     //清空最后边框
     chessRemoveCssForFirst(chessFirstTrackX[chessFirstTrackX.length - 1], chessFirstTrackY[chessFirstTrackY.length - 1]);
-    if (chessSecondClass) {
-        chessRemoveCssForFirst(chessSecondTrackX[chessSecondTrackX.length - 1], chessSecondTrackY[chessSecondTrackY.length - 1]);
-    }
     //增加起点位置样式
-    $("#"+chessFirstTrackX[0]+ "_" +chessFirstTrackY[0]).addClass(chessFirstClass);
-    $("#"+chessSecondTrackX[0] + "_" +chessSecondTrackY[0]).addClass(chessSecondClass);
+    $("#" + chessFirstTrackX[0] + "_" + chessFirstTrackY[0]).addClass(chessFirstClass);
+    //第二点同样操作
+    if (chessSecondClass) {
+        $("#" + chessSecondTrackX[chessSecondTrackX.length - 1] + "_" + chessSecondTrackY[chessSecondTrackY.length - 1]).removeClass(chessSecondClass);
+        chessRemoveCssForFirst(chessSecondTrackX[chessSecondTrackX.length - 1], chessSecondTrackY[chessSecondTrackY.length - 1]);
+        $("#" + chessSecondTrackX[0] + "_" + chessSecondTrackY[0]).addClass(chessSecondClass);
+    }
     //增加删除点样式
+    chessDeleteAddClass();
+    //清空本回合存点
+    chessClearThisStepPoint();
+}
 
+//增加删除点样式
+function chessDeleteAddClass() {
+    for (var d = 0; d < chessDeleteClass.length; d++) {
+        var deleteId = chessDeleteTrackX[d] + "_" + chessDeleteTrackY[d];
+        $("#" + deleteId).addClass(chessDeleteClass[d]);
+    }
+}
+
+//清空本回合存点
+function chessClearThisStepPoint() {
+    //初始化第一个有效点
+    chessClearFirstPoint();
+    //初始化第二个有效点
+    chessClearSecondPoint();
+    //初始化数组轨迹点
+    chessFirstTrackX = new Array();
+    chessFirstTrackY = new Array();
+    chessSecondTrackX = new Array();
+    chessSecondTrackY = new Array();
+    //初始化水步数
+    chessSkills = 0;
+    //初始化水吃掉数
+    chessWalterEat = 0;
+    //走按钮变暗
+    chessWalkDark();
+    //释放技能时
+    if (isSkill === 1) {
+        //木要清空束缚点,技能次数
+        if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
+            chessClearShuFuPoint();
+            chessSkillm = 0;
+        }
+        //火要清技能次数
+        if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
+            chessSkillh = 0;
+        }
+        //土要清空技能次数
+        if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
+            chessClearShuFuPoint();
+            chessSkillt = 0;
+        }
+    }
+    //技能释放初始化
+    isSkill = 0;
+    //步数变为奇数
+    myStep = 1;
 }

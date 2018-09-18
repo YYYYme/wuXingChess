@@ -88,7 +88,7 @@
     </style>
 </head>
 <body>
-<div id="chessBoard" style="width:90%;height:100%;margin:20px 0;text-align:center;background: url(./static/plugins/images/bgpic.png) no-repeat 250px 0px;">
+<div id="chessBoard" style="width:100%;height:100%;margin:20px 0;text-align:center;background: url(./static/plugins/images/bgpic2.jpg) no-repeat 250px 0px;">
     <div class="row-line">
         <span id="0_6" class="squ-line"></span>
     </div>
@@ -201,7 +201,7 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessIsSkill" value="释放技能" onclick="chessReleaseSkill()"/>
+<input type="button" id="chessIsSkill" value="释放技能" disabled="true" onclick="chessReleaseSkill()"/>
 <input type="button" id="chessMeStop" value="走" disabled="true" onclick="chessMeStop()"/>
 <input type="button" id="chessReset" value="重走"  onclick="chessReset()"/>
 <input type="button" id="chessRegret" value="悔棋"  onclick="chessRegret()"/>
