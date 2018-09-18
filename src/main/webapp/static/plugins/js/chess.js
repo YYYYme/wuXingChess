@@ -41,6 +41,10 @@ var chessSkillt = 0;
 var chessOperateSkillm = 0;
 //水吃掉的棋子数量(两步只能吃一个)
 var chessWalterEat = 0;
+//删除点记录
+var deleteClass = new Array();
+var chessDeleteTrackX = new Array();
+var chessDeleteTrackY = new Array();
 
 //根据id获取坐标值
 function chessGetPosition(id) {
@@ -795,4 +799,32 @@ function chessTurnTrace(trace) {
         trace[i] = trace[i] * -1;
     }
     return trace;
+}
+//重走
+function chessReset() {
+    if (chessIsBegin === 0){
+        return;
+    }
+    if(myStep % 2 !== 1){
+        //判断走是亮着的
+        var goDis = $("#chessMeStop").prop("disabled") ;
+        if (goDis) {
+            return;
+        }
+    }
+    //删除最后的位置
+    $("#"+chessFirstTrackX[chessFirstTrackX.length - 1] + "_" +chessFirstTrackY[chessFirstTrackY.length - 1]).removeClass(chessFirstClass);
+    if (chessSecondClass) {
+        $("#"+chessSecondTrackX[chessSecondTrackX.length - 1] + "_" +chessSecondTrackY[chessSecondTrackY.length - 1]).removeClass(chessSecondClass);
+    }
+    //清空最后边框
+    chessRemoveCssForFirst(chessFirstTrackX[chessFirstTrackX.length - 1], chessFirstTrackY[chessFirstTrackY.length - 1]);
+    if (chessSecondClass) {
+        chessRemoveCssForFirst(chessSecondTrackX[chessSecondTrackX.length - 1], chessSecondTrackY[chessSecondTrackY.length - 1]);
+    }
+    //增加起点位置样式
+    $("#"+chessFirstTrackX[0]+ "_" +chessFirstTrackY[0]).addClass(chessFirstClass);
+    $("#"+chessSecondTrackX[0] + "_" +chessSecondTrackY[0]).addClass(chessSecondClass);
+    //增加删除点样式
+
 }
