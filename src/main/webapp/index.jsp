@@ -6,6 +6,9 @@
     <script type="text/javascript" src="./static/plugins/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="./static/plugins/js/chess.js"></script>
     <link rel="stylesheet" href="./static/plugins/css/buttonStyle.css" media="screen" type="text/css"/>
+    <link rel="stylesheet" href="./static/plugins/css/circleReset.css">
+    <link rel="stylesheet" href="./static/plugins/css/circleStyle.css" media="screen" type="text/css" />
+    <script src="./static/plugins/js/circleIndex.js"></script>
     <style>
         .squ-line {
             border: 1px solid #ddd;
@@ -266,6 +269,64 @@
         <span id="chessFail" class="btn btn-small submit fail" onclick="chessFail()">认输</span>
     </div>
 </div>
+
+<div style="text-align:center;clear:both">
+</div>
+<div class="radmenu"><a href="#" class="show" >START</a>
+    <ul>
+        <li>
+            <a href="#" class="">Menu 1</a>
+            <ul>
+                <li><a href="#">Sub Menu 1</a></li>
+                <li><a href="#">Sub Menu 2</a></li>
+                <li><a href="#">Sub Menu 3</a></li>
+                <li><a href="#">Sub Menu 4</a></li>
+                <li><a href="#">Sub Menu 5</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Menu 2</a>
+            <ul>
+                <li><a href="#">Sub Menu 1</a></li>
+                <li><a href="#">Sub Menu 2</a></li>
+                <li><a href="#">Sub Menu 3</a></li>
+                <li><a href="#">Sub Menu 4</a></li>
+                <li><a href="#">Sub Menu 5</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Menu 3</a>
+            <ul>
+                <li><a href="#">Sub Menu 1</a></li>
+                <li><a href="#">Sub Menu 2</a></li>
+                <li><a href="#">Sub Menu 3</a></li>
+                <li><a href="#">Sub Menu 4</a></li>
+                <li><a href="#">Sub Menu 5</a></li>
+
+            </ul>
+        </li>
+        <li>
+            <a href="#">Menu 4</a>
+            <ul>
+                <li><a href="#">Sub Menu 1</a></li>
+                <li><a href="#">Sub Menu 2</a></li>
+                <li><a href="#">Sub Menu 3</a></li>
+                <li><a href="#">Sub Menu 4</a></li>
+                <li><a href="#">Sub Menu 5</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">Menu 5</a>
+            <ul>
+                <li><a href="#">Sub Menu 1</a></li>
+                <li><a href="#">Sub Menu 2</a></li>
+                <li><a href="#">Sub Menu 3</a></li>
+                <li><a href="#">Sub Menu 4</a></li>
+                <li><a href="#">Sub Menu 5</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
 </body>
 
 <script type="text/javascript">
@@ -345,6 +406,12 @@
 
             //对方同意悔棋我方操作
             chessAcceptAgreeRegret();
+            return;
+        }
+        //收到对方拒绝悔棋
+        if (message.type === 6) {
+            //todo 改为弹出框(不影响后续代码)或淡出,上方文字显示已拒绝,下方一按钮,确定,
+
             return;
         }
     };
