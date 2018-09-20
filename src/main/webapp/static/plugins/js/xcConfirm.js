@@ -10,9 +10,9 @@
  * 3. window.wxc.xcConfirm("请输入","input",{onOk:function(){}})
  * 4. window.wxc.xcConfirm("自定义",{title:"自定义"})
  */
-(function($){
+(function ($) {
     window.wxc = window.wxc || {};
-    window.wxc.xcConfirm = function(popHtml, type, options) {
+    window.wxc.xcConfirm = function (popHtml, type, options) {
         var btnType = window.wxc.xcConfirm.btnEnum;
         var eventType = window.wxc.xcConfirm.eventEnum;
         var popType = {
@@ -74,7 +74,7 @@
         var $txt = $("<p>").html(popHtml);//弹窗文本dom
         var $tt = $("<span>").addClass("tt").text(config.title);//标题
         var icon = config.icon;
-        var $icon = icon ? $("<div>").addClass("bigIcon").css("backgroundPosition",icon) : "";
+        var $icon = icon ? $("<div>").addClass("bigIcon").css("backgroundPosition", icon) : "";
         var btn = config.btn;//按钮组生成参数
 
         var popId = creatPopId();//弹窗索引
@@ -103,9 +103,9 @@
 
         init();
 
-        function init(){
+        function init() {
             //处理特殊类型input
-            if(popType["input"] === itype){
+            if (popType["input"] === itype) {
                 $txt.append($input);
             }
 
@@ -113,7 +113,7 @@
             bind();
         }
 
-        function creatDom(){
+        function creatDom() {
             $popBox.append(
                 $ttBox.append(
                     $clsBtn
@@ -129,14 +129,14 @@
             $("body").append($box);
         }
 
-        function bind(){
+        function bind() {
             //点击确认按钮
             $ok.click(doOk);
 
             //回车键触发确认按钮事件
-            $(window).bind("keydown", function(e){
-                if(e.keyCode == 13) {
-                    if($("#" + popId).length == 1){
+            $(window).bind("keydown", function (e) {
+                if (e.keyCode == 13) {
+                    if ($("#" + popId).length == 1) {
                         doOk();
                     }
                 }
@@ -149,14 +149,14 @@
             $clsBtn.click(doClose);
 
             //点击重新开始按钮
-            $clsBtn.click(doRestart);
+            $restart.click(doRestart);
 
             //点击退出房间按钮
-            $clsBtn.click(doOut);
+            $out.click(doOut);
         }
 
         //确认按钮事件
-        function doOk(){
+        function doOk() {
             var $o = $(this);
             var v = $.trim($input.val());
             if ($input.is(":visible"))
@@ -168,7 +168,7 @@
         }
 
         //取消按钮事件
-        function doCancel(){
+        function doCancel() {
             var $o = $(this);
             config.onCancel();
             $("#" + popId).remove();
@@ -176,14 +176,14 @@
         }
 
         //关闭按钮事件
-        function doClose(){
+        function doClose() {
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
         }
 
         //重新开始按钮事件
-        function doRestart(){
+        function doRestart() {
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
@@ -191,30 +191,34 @@
         }
 
         //退出房间按钮事件
-        function doOut(){
+        function doOut() {
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
-            window.self.location("room.jsp");
+            window.self.location = "room.jsp";
         }
 
         //生成按钮组
-        function creatBtnGroup(tp){
+        function creatBtnGroup(tp) {
             var $bgp = $("<div>").addClass("btnGroup");
-            $.each(btns, function(i, n){
-                if( btnType[i] == (tp & btnType[i]) ){
+            $.each(btns, function (i, n) {
+                if (btnType[i] == (tp & btnType[i])) {
                     $bgp.append(n);
+                }
+                if (tp == 4) {
+                    if (i === 'restart' || i === 'out')
+                        $bgp.append(n);
                 }
             });
             return $bgp;
         }
 
         //重生popId,防止id重复
-        function creatPopId(){
-            var i = "pop_" + (new Date()).getTime()+parseInt(Math.random()*100000);//弹窗索引
-            if($("#" + i).length > 0){
+        function creatPopId() {
+            var i = "pop_" + (new Date()).getTime() + parseInt(Math.random() * 100000);//弹窗索引
+            if ($("#" + i).length > 0) {
                 return creatPopId();
-            }else{
+            } else {
                 return i;
             }
         }
@@ -222,10 +226,10 @@
 
     //按钮类型
     window.wxc.xcConfirm.btnEnum = {
-        ok: parseInt("0001",2), //确定按钮
-        cancel: parseInt("0010",2), //取消按钮
-        okcancel: parseInt("0011",2), //确定&&取消
-        restartout: parseInt("0100",2), //重新开始&&退出房间
+        ok: parseInt("0001", 2), //确定按钮
+        cancel: parseInt("0010", 2), //取消按钮
+        okcancel: parseInt("0011", 2), //确定&&取消
+        restartout: parseInt("0100", 2), //重新开始&&退出房间
     };
 
     //触发事件类型
@@ -241,7 +245,7 @@
     window.wxc.xcConfirm.typeEnum = {
         info: "info",
         success: "success",
-        error:"error",
+        error: "error",
         confirm: "confirm",
         warning: "warning",
         input: "input",
