@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="./static/plugins/css/buttonStyle.css" media="screen" type="text/css"/>
     <link rel="stylesheet" href="./static/plugins/css/circleReset.css">
     <link rel="stylesheet" href="./static/plugins/css/circleStyle.css" media="screen" type="text/css"/>
-
+    <link rel="stylesheet" type="text/css" href="./static/plugins/css/xcConfirm.css"/>
+    <script src="./static/plugins/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
     <style>
         .squ-line {
             border: 1px solid #ddd;
@@ -288,6 +289,10 @@
     <div class="row">
         <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
         <input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>
+    </div>
+    <div class="row">
+        <input type="button" id="chessBackToRoom" class="btn btn-small submit" value="退出" onclick="chessBackToRoom()"/>
+        <input type="button" id="chessWatchRules" class="btn btn-small submit" value="查看规则" onclick="chessWatchRules()"/>
     </div>
 </div>
 

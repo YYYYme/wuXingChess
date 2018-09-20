@@ -1118,3 +1118,25 @@ function chessCancelLastStep(chessMessage) {
         $("#" + deleteId).addClass(chessMessage.chessDeleteClass[d]);
     }
 }
+//退出
+function chessBackToRoom() {
+    window.self.location = "room.jsp";
+}
+//查看规则
+function chessWatchRules() {
+    var txt=  "一步一步走\n" +
+        "不能斜着走\n" +
+        "金:对方棋子相连时可以连续吃\n" +
+        "木:可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消\n" +
+        "火:可以拼掉一排的另一个敌人\n" +
+        "土:可以带着一个人瞬移一次\n" +
+        "火,木,土技能都只能发动一次,且老将免疫攻击\n" +
+        "水可以走两步,只能吃掉一个\n";
+    var option = {
+        title: "查看规则",
+        btn: parseInt("0011",2),
+        onOk: function(){
+        }
+    }
+    window.wxc.xcConfirm(txt, "custom", option);
+}
