@@ -7,8 +7,8 @@
     <script type="text/javascript" src="./static/plugins/js/chess.js"></script>
     <link rel="stylesheet" href="./static/plugins/css/buttonStyle.css" media="screen" type="text/css"/>
     <link rel="stylesheet" href="./static/plugins/css/circleReset.css">
-    <link rel="stylesheet" href="./static/plugins/css/circleStyle.css" media="screen" type="text/css" />
-    <script src="./static/plugins/js/circleIndex.js"></script>
+    <link rel="stylesheet" href="./static/plugins/css/circleStyle.css" media="screen" type="text/css"/>
+
     <style>
         .squ-line {
             border: 1px solid #ddd;
@@ -129,7 +129,12 @@
             left: 1500px;
             top: 220px;
         }*/
-
+        input[disabled] {
+            color: #2c2f51;
+            opacity: 1;
+            background: #3e1b3b;
+            box-shadow: 0px 5px #1a1b19;
+        }
     </style>
 </head>
 <body class="back">
@@ -254,7 +259,7 @@
 <input type="button" id="chessRegret" class="btn btn-small submit regret" value="悔棋" onclick="chessRegret()"/>
 <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
 <input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>--%>
-<div class="container">
+<%--<div class="container">
     <div class="row">
         <span id="chessMeStop" class="btn btn-small submit walk" disabled="true" onclick="chessMeStop()">走</span>
         <span id="chessIsSkill" class="btn btn-small submit skill" disabled="true"
@@ -268,65 +273,36 @@
         <span id="chessPeace" class="btn btn-small submit peace" onclick="chessPeace()">求和</span>
         <span id="chessFail" class="btn btn-small submit fail" onclick="chessFail()">认输</span>
     </div>
+</div>--%>
+<div class="container">
+    <div class="row">
+        <input type="button" id="chessMeStop" class="btn btn-small submit walk" value="走" disabled="true"
+               onclick="chessMeStop()"/>
+        <input type="button" id="chessIsSkill" class="btn btn-small submit skill" value="技能" disabled="true"
+               onclick="chessReleaseSkill()"/>
+    </div>
+    <div class="row">
+        <input type="button" id="chessReset" class="btn btn-small submit reset" value="重走" onclick="chessReset()"/>
+        <input type="button" id="chessRegret" class="btn btn-small submit regret" value="悔棋" onclick="chessRegret()"/>
+    </div>
+    <div class="row">
+        <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
+        <input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>
+    </div>
 </div>
 
 <div style="text-align:center;clear:both">
 </div>
-<div class="radmenu"><a href="#" class="show" >START</a>
+<div class="radmenu"><a href="#" class="show" style="color:red">木:未释放</a>
     <ul>
-        <li>
-            <a href="#" class="">Menu 1</a>
-            <ul>
-                <li><a href="#">Sub Menu 1</a></li>
-                <li><a href="#">Sub Menu 2</a></li>
-                <li><a href="#">Sub Menu 3</a></li>
-                <li><a href="#">Sub Menu 4</a></li>
-                <li><a href="#">Sub Menu 5</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#">Menu 2</a>
-            <ul>
-                <li><a href="#">Sub Menu 1</a></li>
-                <li><a href="#">Sub Menu 2</a></li>
-                <li><a href="#">Sub Menu 3</a></li>
-                <li><a href="#">Sub Menu 4</a></li>
-                <li><a href="#">Sub Menu 5</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#">Menu 3</a>
-            <ul>
-                <li><a href="#">Sub Menu 1</a></li>
-                <li><a href="#">Sub Menu 2</a></li>
-                <li><a href="#">Sub Menu 3</a></li>
-                <li><a href="#">Sub Menu 4</a></li>
-                <li><a href="#">Sub Menu 5</a></li>
-
-            </ul>
-        </li>
-        <li>
-            <a href="#">Menu 4</a>
-            <ul>
-                <li><a href="#">Sub Menu 1</a></li>
-                <li><a href="#">Sub Menu 2</a></li>
-                <li><a href="#">Sub Menu 3</a></li>
-                <li><a href="#">Sub Menu 4</a></li>
-                <li><a href="#">Sub Menu 5</a></li>
-            </ul>
-        </li>
-        <li>
-            <a href="#">Menu 5</a>
-            <ul>
-                <li><a href="#">Sub Menu 1</a></li>
-                <li><a href="#">Sub Menu 2</a></li>
-                <li><a href="#">Sub Menu 3</a></li>
-                <li><a href="#">Sub Menu 4</a></li>
-                <li><a href="#">Sub Menu 5</a></li>
-            </ul>
-        </li>
+        <li><a href="#" style="color:red">火:未释放</a></li>
+        <li><a href="#" style="color:red">土:未释放</a></li>
+        <li><a href="#">木:未释放</a></li>
+        <li><a href="#">火:未释放</a></li>
+        <li><a href="#">土:未释放</a></li>
     </ul>
 </div>
+<script src="./static/plugins/js/circleIndex.js"></script>
 </body>
 
 <script type="text/javascript">
