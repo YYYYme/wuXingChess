@@ -91,21 +91,25 @@
             margin: 0px;
             text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
-            background-attachment: fixed;
+            /*background-attachment: fixed;*/
             background-size: cover;
             width: 100%;
             height: 100%;
         }
 
-        .remindMes {
+        .remind-mes {
             text-align: center;
             display: block;
+            margin: 0 auto;
+        }
+        .remind-div{
+            padding: 10px 0px;
         }
     </style>
 </head>
 <body class="back">
-<div class="row-line">
-    <p id="remindMes" class="btn btn-medium cancel remindMes">等待开始</p>
+<div class="remind-div">
+    <p id="remindMes" class="btn-medium cancel remind-mes">等待开始</p>
 </div>
 <div id="chessBoard">
     <div class="row-line">
@@ -297,7 +301,7 @@
         init();
     }
     else {
-        alert('当前浏览器 Not support websocket');
+        chessAlertError('当前浏览器 Not support websocket');
     }
 
     //接收到消息的回调方法
@@ -337,7 +341,7 @@
             chessAlertEndMessage("对方认输");
             return;
         }
-        //收到对方悔棋
+        //收到对方请求悔棋
         if (message.type === 4) {
             chessAlertRegret();
             return;
@@ -360,11 +364,11 @@
     $('.squ-line').click(function (e) {
         console.log(e);
         if (chessIsBegin === 0) {
-            alert("没有对手加入房间");
+            chessAlertError("没有对手加入房间");
             return;
         }
         if (myStep % 2 !== 1) {
-            alert("未到我方走");
+            chessAlertError("未到我方走");
             return;
         }
         //获取点击点id,class
@@ -383,7 +387,7 @@
                 if (chessJudgeMyChess(firstClass)) {
                     //点击点已被束缚
                     if (point[0] == chessShuFuPoint.x && point[1] == chessShuFuPoint.y) {
-                        alert("此子已被对方束缚");
+                        chessAlertError("此子已被对方束缚");
                         return;
                     }
                     //技能是否亮起
@@ -415,7 +419,7 @@
                         if (chessJudgeMyChess(firstClass)) {
                             //点击点已被束缚
                             if (point[0] == chessShuFuPoint.x && point[1] == chessShuFuPoint.y) {
-                                alert("此子已被对方束缚");
+                                chessAlertError("此子已被对方束缚");
                                 return;
                             }
                             //取消上个点击点样式
@@ -438,7 +442,7 @@
 
     //连接发生错误的回调方法
     websocket.onerror = function () {
-        alert("WebSocket连接发生错误");
+        chessAlertError("WebSocket连接发生错误");
     };
 
     //连接成功建立的回调方法

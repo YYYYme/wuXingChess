@@ -943,8 +943,10 @@ function chessRemoveCssForFirst(x, y) {
 //认输
 function chessFail() {
     chessType = 3;
-    chessAssembleMessage(3);
+    var message = chessAssembleMessage(3);
     chessType = 1;
+    send(message);
+    chessAlertEndMessage("已认输");
 }
 
 //翻转棋盘
@@ -1095,6 +1097,9 @@ function chessAgreeRegret() {
         //提示:对方回合
         chessRemindMes("对方回合");
     }
+    //撤回我方上次走的棋子
+    var sendMessage = eval('(' + chessSendMessage + ')');
+    chessCancelLastStep(sendMessage);
     //撤回对方走的棋子
     chessCancelLastStep(chessAcceptMessage);
 }
@@ -1116,13 +1121,15 @@ function chessAcceptAgreeRegret() {
     if (isMyStep) {
         //先调用重走功能
         chessReset();
-        //撤回之前走的棋子
+        //撤回对方之前走的棋子
         chessCancelLastStep(chessAcceptMessage);
         //撤回我方上次走的棋子
-        chessCancelLastStep(chessSendMessage);
+        var sendMessage = eval('(' + chessSendMessage + ')');
+        chessCancelLastStep(sendMessage);
     } else {
         //撤回我方上次走的棋子
-        chessCancelLastStep(chessSendMessage);
+        var sendMessage = eval('(' + chessSendMessage + ')');
+        chessCancelLastStep(sendMessage);
         //步数回到奇数
         myStep = 1;
         //提示:我方回合
@@ -1130,16 +1137,20 @@ function chessAcceptAgreeRegret() {
     }
 }
 
-//撤回对方走的棋子
+//撤回之前走的棋子
 function chessCancelLastStep(chessMessage) {
+    var lastChessFirstTrackX = chessMessage.chessFirstTrackX;
+    var lastChessFirstTrackY = chessMessage.chessFirstTrackY;
     //删除最后的位置
-    $("#" + chessMessage.chessFirstTrackX[chessMessage.chessFirstTrackX.length - 1] + "_" + chessMessage.chessFirstTrackY[chessMessage.chessFirstTrackY.length - 1]).removeClass(chessMessage.chessFirstClass);
+    $("#" + lastChessFirstTrackX[lastChessFirstTrackX.length - 1] + "_" + lastChessFirstTrackY[lastChessFirstTrackY.length - 1]).removeClass(chessMessage.chessFirstClass);
     //增加起点位置样式
-    $("#" + chessMessage.chessFirstTrackX[0] + "_" + chessMessage.chessFirstTrackY[0]).addClass(chessMessage.chessFirstClass);
+    $("#" + lastChessFirstTrackX[0] + "_" + lastChessFirstTrackY[0]).addClass(chessMessage.chessFirstClass);
     //第二点同样操作
     if (chessMessage.chessSecondClass) {
-        $("#" + chessMessage.chessSecondTrackX[chessMessage.chessSecondTrackX.length - 1] + "_" + chessMessage.chessSecondTrackY[chessMessage.chessSecondTrackY.length - 1]).removeClass(chessMessage.chessSecondClass);
-        $("#" + chessMessage.chessSecondTrackX[0] + "_" + chessMessage.chessSecondTrackY[0]).addClass(chessMessage.chessSecondClass);
+        var lastChessSecondTrackX = chessMessage.chessSecondTrackX;
+        var lastChessSecondTrackY = chessMessage.chessSecondTrackY;
+        $("#" + lastChessSecondTrackX[lastChessSecondTrackX.length - 1] + "_" + lastChessSecondTrackY[lastChessSecondTrackY.length - 1]).removeClass(chessMessage.chessSecondClass);
+        $("#" + lastChessSecondTrackX[0] + "_" + lastChessSecondTrackY[0]).addClass(chessMessage.chessSecondClass);
     }
     //增加删除点样式
     for (var d = 0; d < chessMessage.chessDeleteClass.length; d++) {
@@ -1234,10 +1245,18 @@ function chessAlertEndMessage(txt) {
         onOut: function () {
             window.self.location = "room.jsp";
         }
-    }
+    };
     window.wxc.xcConfirm(txt, "restartout", option);
 }
 //更改顶部提示文字
 function chessRemindMes(mes) {
     $("#remindMes").text(mes);
+}
+//求和
+function chessPeace(){
+    alert("不想做这个功能");
+}
+//错误弹框
+function chessAlertError(txt) {
+    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.error);
 }
