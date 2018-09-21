@@ -1155,6 +1155,7 @@ function chessBackToRoom() {
 
 //查看规则
 function chessWatchRules() {
+    //todo 增大边框
     var txt = "一步一步走\n" +
         "不能斜着走\n" +
         "金:对方棋子相连时可以连续吃\n" +

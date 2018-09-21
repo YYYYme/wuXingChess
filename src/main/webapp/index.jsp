@@ -93,6 +93,8 @@
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
             background-attachment: fixed;
             background-size: cover;
+            width: 100%;
+            height: 100%;
         }
 
         .remindMes {
