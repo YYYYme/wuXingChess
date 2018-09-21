@@ -618,13 +618,19 @@ function chessIsSkill() {
                 chessSkillLight();
                 return;
             }
-        } else if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
+        }
+    }
+    if (chessSkillh !== 1) {
+        if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
             //横向或纵向是否有对方棋子
             if (chessHaveCanBornClass()) {
                 chessSkillLight();
                 return;
             }
-        } else if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
+        }
+    }
+    if (chessSkillt !== 1) {
+        if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
             //周围一圈是否有对方棋子
             if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
                 chessSkillLight();
@@ -735,12 +741,12 @@ function chessExistClassAround(x, y, myClass) {
 
 //技能释放按钮亮起
 function chessSkillLight() {
-    $("#chessIsSkill").removeAttr("disabled");
+    $("#chessIsSkill").attr("disabled", false);
 }
 
 //技能释放按钮变暗
 function chessSkillDark() {
-    $("#chessMeStop").attr("disabled", "true");
+    $("#chessIsSkill").attr("disabled", true);
 }
 
 //走按钮亮起
@@ -1033,20 +1039,24 @@ function chessClearThisStepPoint() {
     //步数变为奇数
     myStep = 1;
 }
+
 //悔棋
 function chessRegret() {
     if (chessIsBegin === 0) {
         return;
     }
-    if (chessMyStepCount === 0){
+    if (chessMyStepCount === 0) {
         return;
     }
     //发送申请
-    chessAssembleMessage(4);
+    var message = chessAssembleMessage(4);
+    send(message);
     //todo 弹出框倒计时10s,什么都不能干
+
 }
+
 //同意悔棋操作
-function chessAgreeRegret(){
+function chessAgreeRegret() {
     //判断是否我方操作
     var isMyStep = false;
     if (myStep % 2 !== 1) {
@@ -1059,7 +1069,7 @@ function chessAgreeRegret(){
         isMyStep = true;
     }
     //我方操作
-    if (isMyStep){
+    if (isMyStep) {
         //先调用重走功能
         chessReset();
         //步数加一,不让我方手动移动棋子
@@ -1070,8 +1080,9 @@ function chessAgreeRegret(){
     //撤回对方走的棋子
     chessCancelLastStep(chessAcceptMessage);
 }
+
 //对方同意悔棋我方操作
-function chessAcceptAgreeRegret(){
+function chessAcceptAgreeRegret() {
     //判断是否我方操作
     var isMyStep = false;
     if (myStep % 2 !== 1) {
@@ -1084,7 +1095,7 @@ function chessAcceptAgreeRegret(){
         isMyStep = true;
     }
     //我方可以走
-    if (isMyStep){
+    if (isMyStep) {
         //先调用重走功能
         chessReset();
         //撤回之前走的棋子
@@ -1101,6 +1112,7 @@ function chessAcceptAgreeRegret(){
 
     }
 }
+
 //撤回对方走的棋子
 function chessCancelLastStep(chessMessage) {
     //删除最后的位置
@@ -1118,13 +1130,15 @@ function chessCancelLastStep(chessMessage) {
         $("#" + deleteId).addClass(chessMessage.chessDeleteClass[d]);
     }
 }
+
 //退出
 function chessBackToRoom() {
     window.self.location = "room.jsp";
 }
+
 //查看规则
 function chessWatchRules() {
-    var txt=  "一步一步走\n" +
+    var txt = "一步一步走\n" +
         "不能斜着走\n" +
         "金:对方棋子相连时可以连续吃\n" +
         "木:可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消\n" +
@@ -1134,9 +1148,73 @@ function chessWatchRules() {
         "水可以走两步,只能吃掉一个\n";
     var option = {
         title: "查看规则",
-        btn: parseInt("0011",2),
-        onOk: function(){
+        btn: parseInt("0011", 2),
+        onOk: function () {
         }
     }
     window.wxc.xcConfirm(txt, "custom", option);
+}
+
+//收到悔棋弹出框
+function chessAlertRegret() {
+    var txt = "对方请求悔棋";
+    var option = {
+        title: "",
+        btn: parseInt("0011", 2),
+        onOk: function () {
+            //发送同意悔棋
+            var message = chessAssembleMessage(5);
+            send(message);
+            //同意悔棋操作
+            chessAgreeRegret();
+        },
+        onCancel: function () {
+            //发送拒绝悔棋
+            var message = chessAssembleMessage(6);
+            send(message);
+        },
+        onClose: function () {
+            //发送拒绝悔棋
+            var message = chessAssembleMessage(6);
+            send(message);
+        }
+    };
+    return window.wxc.xcConfirm(txt, "custom", option);
+    chessSetTime(txt);
+}
+
+//倒计时
+var chessCountDown = 5;
+function chessSetTime(txt) {
+    if (chessCountDown === 0) {
+        //关闭弹出框
+        $(".out").trigger("click");
+        chessCountDown = 5;
+    } else {
+        chessCountDown--;
+        $('.txtBox').html(txt + chessCountDown);
+        setTimeout(function () {
+            chessSetTime(txt)
+        }, 1000)
+    }
+}
+
+//弹出信息框,只有确定按钮
+function chessAlertMessage(txt) {
+    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.info);
+}
+
+//结束提示框,按钮:重新开始,退出房间
+function chessAlertEndMessage(txt) {
+    var option = {
+        title: "",
+        btn: parseInt("0100", 2),
+        onRestart: function () {
+            location.reload();
+        },
+        onOut: function () {
+            window.self.location = "room.jsp";
+        }
+    }
+    window.wxc.xcConfirm(txt, "restartout", option);
 }

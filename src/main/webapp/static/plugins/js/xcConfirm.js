@@ -88,8 +88,8 @@
 
         var $ok = $("<a>").addClass("sgBtn").addClass("ok").text("确定");//确定按钮
         var $cancel = $("<a>").addClass("sgBtn").addClass("cancel").text("取消");//取消按钮
-        var $restart = $("<a>").addClass("sgBtn").addClass("restart").text("重新开始");//重新开始按钮
-        var $out = $("<a>").addClass("sgBtn").addClass("out").text("退出房间");//退出按钮
+        var $restart = $("<a>").addClass("sgBtn").addClass("ok").text("重新开始");//重新开始按钮
+        var $out = $("<a>").addClass("sgBtn").addClass("cancel").text("退出房间");//退出按钮
         var $input = $("<input>").addClass("inputBox");//输入框
         var $clsBtn = $("<a>").addClass("clsBtn");//关闭按钮
 
@@ -187,7 +187,6 @@
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
-            location.reload();
         }
 
         //退出房间按钮事件
@@ -195,7 +194,6 @@
             $("#" + popId).remove();
             config.onClose(eventType.close);
             $(window).unbind("keydown");
-            window.self.location = "room.jsp";
         }
 
         //生成按钮组

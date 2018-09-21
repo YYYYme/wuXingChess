@@ -130,12 +130,12 @@
             left: 1500px;
             top: 220px;
         }*/
-        input[disabled] {
+        /*input[disabled] {
             color: #2c2f51;
             opacity: 1;
             background: #3e1b3b;
             box-shadow: 0px 5px #1a1b19;
-        }
+        }*/
     </style>
 </head>
 <body class="back">
@@ -252,14 +252,14 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<%--<input type="button" id="chessMeStop" class="btn btn-small submit walk" value="走" disabled="true"
+<input type="button" id="chessMeStop" class="walk" value="走" disabled="disabled"
        onclick="chessMeStop()"/>
-<input type="button" id="chessIsSkill" class="btn btn-small submit skill" value="技能" disabled="true"
+<input type="button" id="chessIsSkill" class="skill" value="技能" disabled="disabled"
        onclick="chessReleaseSkill()"/>
 <input type="button" id="chessReset" class="btn btn-small submit reset" value="重走" onclick="chessReset()"/>
 <input type="button" id="chessRegret" class="btn btn-small submit regret" value="悔棋" onclick="chessRegret()"/>
 <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
-<input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>--%>
+<input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>
 <%--<div class="container">
     <div class="row">
         <span id="chessMeStop" class="btn btn-small submit walk" disabled="true" onclick="chessMeStop()">走</span>
@@ -275,11 +275,11 @@
         <span id="chessFail" class="btn btn-small submit fail" onclick="chessFail()">认输</span>
     </div>
 </div>--%>
-<div class="container">
+<%--<div class="container">
     <div class="row">
-        <input type="button" id="chessMeStop" class="btn btn-small submit walk" value="走" disabled="true"
+        <input type="button" id="chessMeStop" class="btn btn-small submit walk" value="走" disabled="disabled"
                onclick="chessMeStop()"/>
-        <input type="button" id="chessIsSkill" class="btn btn-small submit skill" value="技能" disabled="true"
+        <input type="button" id="chessIsSkill" class="btn btn-small submit skill" value="技能" disabled="disabled"
                onclick="chessReleaseSkill()"/>
     </div>
     <div class="row">
@@ -294,7 +294,7 @@
         <input type="button" id="chessBackToRoom" class="btn btn-small submit" value="退出" onclick="chessBackToRoom()"/>
         <input type="button" id="chessWatchRules" class="btn btn-small submit" value="查看规则" onclick="chessWatchRules()"/>
     </div>
-</div>
+</div>--%>
 
 <div style="text-align:center;clear:both">
 </div>
@@ -358,41 +358,29 @@
         }
         //收到对方胜利
         if (message.type === 2) {
-            //todo 改为弹出框,上方文字,下方两个按钮,重新开始(刷新页面),退出房间
-            alert("对方获胜");
-
+            chessAlertEndMessage("对方获胜");
             return;
         }
         //收到对方认输
         if (message.type === 3) {
-            //todo 改为弹出框,上方文字,下方两个按钮,重新开始(刷新页面),退出房间
-            alert("对方认输");
-
+            chessAlertEndMessage("对方认输");
             return;
         }
         //收到对方悔棋
         if (message.type === 4) {
-            //todo 改为弹出框,上方文字,下方两个按钮,同意,拒绝
-
-            //同意
-            //发送同意悔棋
-            chessAssembleMessage(5);
-            //同意悔棋操作
-            chessAgreeRegret();
+            chessAlertRegret();
             return;
         }
         //收到对方同意悔棋
         if (message.type === 5) {
-            //todo 改为弹出框(不影响后续代码)或淡出,上方文字显示已同意,下方一按钮,确定,
-
+            chessAlertMessage("对方同意悔棋");
             //对方同意悔棋我方操作
             chessAcceptAgreeRegret();
             return;
         }
         //收到对方拒绝悔棋
         if (message.type === 6) {
-            //todo 改为弹出框(不影响后续代码)或淡出,上方文字显示已拒绝,下方一按钮,确定,
-
+            chessAlertMessage("对方拒绝悔棋");
             return;
         }
     };

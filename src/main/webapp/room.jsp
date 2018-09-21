@@ -60,7 +60,7 @@
         //未满员
         //跳转页面,将颜色和步骤传入跳转页面,第一个为红方,第二个黑方
         window.self.location = "index.jsp?desc=" + desc + "&roomName=" + roomName;
-        //location.href = "index.jsp?desc="+desc;
+        //location.href = "index.jsp?desc="+desc+ "&roomName=" + roomName;
     }
 
     function judgeRoomFull(roomName) {
