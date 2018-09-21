@@ -7,8 +7,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 20%;
+  height: 50%;
+    top:70px;
+    left:1400px;
 }
 .radmenu > a {
   top: calc(50% - 60px);
@@ -24,9 +26,9 @@ body {
 }
 .radmenu a {
   position: absolute;
-  width: 120px;
-  height: 120px;
-  background: rgba(255, 255, 255, 0.9);
+  width: 100px;
+  height: 100px;
+  background: rgba(209, 169, 90, 0.9);
   text-align: center;
   align-items: center;
   justify-content: center;

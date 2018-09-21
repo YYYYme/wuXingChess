@@ -14,6 +14,8 @@ var chessAcceptMessage;
 var chessSendMessage;
 //我放颜色 1:红色
 var myColor = 1;
+//悔棋次数
+var chessRegretCount = 0;
 var INIT_VALUE = 99;
 var firstPoint = {
     x: INIT_VALUE,
@@ -616,15 +618,19 @@ function chessIsSkill() {
             //周围一圈是否有我方棋子
             if (chessExistClassAround(firstPoint.x, firstPoint.y, true)) {
                 chessSkillLight();
+                //技能重命名
+                chessSkillRename("束缚");
                 return;
             }
         }
     }
     if (chessSkillh !== 1) {
         if (chessFirstClass === "huo" || chessFirstClass === "huo0") {
-            //横向或纵向是否有对方棋子
+            //横向或纵向最近处是否有对方棋子
             if (chessHaveCanBornClass()) {
                 chessSkillLight();
+                //技能重命名
+                chessSkillRename("燃烧");
                 return;
             }
         }
@@ -634,14 +640,19 @@ function chessIsSkill() {
             //周围一圈是否有对方棋子
             if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
                 chessSkillLight();
+                //技能重命名
+                chessSkillRename("传送");
                 return;
             }
         }
     }
     chessSkillDark();
 }
-
-//横向或纵向是否有可燃烧的对方棋子
+//技能重命名
+function chessSkillRename(name){
+    $("#chessIsSkill").val(name);
+}
+//横向或纵向最近处是否有可燃烧的对方棋子
 function chessHaveCanBornClass() {
     var x = firstPoint.x;
     var y = firstPoint.y;
@@ -747,6 +758,8 @@ function chessSkillLight() {
 //技能释放按钮变暗
 function chessSkillDark() {
     $("#chessIsSkill").attr("disabled", true);
+    //技能重命名
+    chessSkillRename("技能");
 }
 
 //走按钮亮起
@@ -815,6 +828,7 @@ function chessMeStop() {
     isSkill = 0;
     //步数加一
     chessMyStepCount++;
+    chessRemindMes("对方回合");
 }
 
 //组装走步信息
@@ -1048,10 +1062,14 @@ function chessRegret() {
     if (chessMyStepCount === 0) {
         return;
     }
+    if (chessRegretCount === 1) {
+        window.wxc.xcConfirm("只能悔棋一次", window.wxc.xcConfirm.typeEnum.warning);
+    }
     //发送申请
     var message = chessAssembleMessage(4);
     send(message);
-    //todo 弹出框倒计时10s,什么都不能干
+    chessRegretCount = 1;
+    //todo 弹出框倒计时5s,什么都不能干
 
 }
 
@@ -1074,8 +1092,8 @@ function chessAgreeRegret() {
         chessReset();
         //步数加一,不让我方手动移动棋子
         myStep++;
-        //todo 提示:对方回合
-
+        //提示:对方回合
+        chessRemindMes("对方回合");
     }
     //撤回对方走的棋子
     chessCancelLastStep(chessAcceptMessage);
@@ -1107,9 +1125,8 @@ function chessAcceptAgreeRegret() {
         chessCancelLastStep(chessSendMessage);
         //步数回到奇数
         myStep = 1;
-
-        //todo 提示:我方回合
-
+        //提示:我方回合
+        chessRemindMes("我方回合");
     }
 }
 
@@ -1145,7 +1162,8 @@ function chessWatchRules() {
         "火:可以拼掉一排的另一个敌人\n" +
         "土:可以带着一个人瞬移一次\n" +
         "火,木,土技能都只能发动一次,且老将免疫攻击\n" +
-        "水可以走两步,只能吃掉一个\n";
+        "水可以走两步,只能吃掉一个\n" +
+        "只能悔棋一次";
     var option = {
         title: "查看规则",
         btn: parseInt("0011", 2),
@@ -1217,4 +1235,8 @@ function chessAlertEndMessage(txt) {
         }
     }
     window.wxc.xcConfirm(txt, "restartout", option);
+}
+//更改顶部提示文字
+function chessRemindMes(mes) {
+    $("#remindMes").text(mes);
 }

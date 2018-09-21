@@ -91,54 +91,20 @@
             margin: 0px;
             text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
-            background-size: 100% 100%;
             background-attachment: fixed;
+            background-size: cover;
         }
 
-        /*.walk {
-            position: absolute;
-            left: 1400px;
-            top: 120px;
+        .remindMes {
+            text-align: center;
+            display: block;
         }
-
-        .skill {
-            position: absolute;
-            left: 1500px;
-            top: 120px;
-        }
-
-        .reset {
-            position: absolute;
-            left: 1400px;
-            top: 170px;
-        }
-
-        .regret {
-            position: absolute;
-            left: 1500px;
-            top: 170px;
-        }
-
-        .peace {
-            position: absolute;
-            left: 1400px;
-            top: 220px;
-        }
-
-        .fail {
-            position: absolute;
-            left: 1500px;
-            top: 220px;
-        }*/
-        /*input[disabled] {
-            color: #2c2f51;
-            opacity: 1;
-            background: #3e1b3b;
-            box-shadow: 0px 5px #1a1b19;
-        }*/
     </style>
 </head>
 <body class="back">
+<div class="row-line">
+    <p id="remindMes" class="btn btn-medium cancel remindMes">等待开始</p>
+</div>
 <div id="chessBoard">
     <div class="row-line">
         <span id="0_6" class="squ-line"></span>
@@ -252,14 +218,14 @@
         <span id="0_-6" class="squ-line"></span>
     </div>
 </div>
-<input type="button" id="chessMeStop" class="walk" value="走" disabled="disabled"
+<%--<input type="button" id="chessMeStop" class="walk" value="走" disabled="disabled"
        onclick="chessMeStop()"/>
 <input type="button" id="chessIsSkill" class="skill" value="技能" disabled="disabled"
        onclick="chessReleaseSkill()"/>
 <input type="button" id="chessReset" class="btn btn-small submit reset" value="重走" onclick="chessReset()"/>
 <input type="button" id="chessRegret" class="btn btn-small submit regret" value="悔棋" onclick="chessRegret()"/>
 <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
-<input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>
+<input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>--%>
 <%--<div class="container">
     <div class="row">
         <span id="chessMeStop" class="btn btn-small submit walk" disabled="true" onclick="chessMeStop()">走</span>
@@ -275,36 +241,37 @@
         <span id="chessFail" class="btn btn-small submit fail" onclick="chessFail()">认输</span>
     </div>
 </div>--%>
-<%--<div class="container">
+<div class="container">
     <div class="row">
-        <input type="button" id="chessMeStop" class="btn btn-small submit walk" value="走" disabled="disabled"
+        <input type="button" id="chessMeStop" class="btn btn-small submit " value="走" disabled="disabled"
                onclick="chessMeStop()"/>
-        <input type="button" id="chessIsSkill" class="btn btn-small submit skill" value="技能" disabled="disabled"
+        <input type="button" id="chessIsSkill" class="btn btn-small submit " value="技能" disabled="disabled"
                onclick="chessReleaseSkill()"/>
     </div>
     <div class="row">
-        <input type="button" id="chessReset" class="btn btn-small submit reset" value="重走" onclick="chessReset()"/>
-        <input type="button" id="chessRegret" class="btn btn-small submit regret" value="悔棋" onclick="chessRegret()"/>
+        <input type="button" id="chessReset" class="btn btn-small submit " value="重走" onclick="chessReset()"/>
+        <input type="button" id="chessRegret" class="btn btn-small submit " value="悔棋" onclick="chessRegret()"/>
     </div>
     <div class="row">
-        <input type="button" id="chessPeace" class="btn btn-small submit peace" value="求和" onclick="chessPeace()"/>
-        <input type="button" id="chessFail" class="btn btn-small submit fail" value="认输" onclick="chessFail()"/>
+        <input type="button" id="chessPeace" class="btn btn-small submit " value="求和" onclick="chessPeace()"/>
+        <input type="button" id="chessFail" class="btn btn-small submit " value="认输" onclick="chessFail()"/>
     </div>
     <div class="row">
         <input type="button" id="chessBackToRoom" class="btn btn-small submit" value="退出" onclick="chessBackToRoom()"/>
-        <input type="button" id="chessWatchRules" class="btn btn-small submit" value="查看规则" onclick="chessWatchRules()"/>
+        <input type="button" id="chessWatchRules" class="btn btn-small submit" value="查看规则"
+               onclick="chessWatchRules()"/>
     </div>
-</div>--%>
+</div>
 
 <div style="text-align:center;clear:both">
 </div>
-<div class="radmenu"><a href="#" class="show" style="color:red">木:未释放</a>
+<div class="radmenu"><a href="#" class="show" style="color:red">束缚:未释放</a>
     <ul>
-        <li><a href="#" style="color:red">火:未释放</a></li>
-        <li><a href="#" style="color:red">土:未释放</a></li>
-        <li><a href="#">木:未释放</a></li>
-        <li><a href="#">火:未释放</a></li>
-        <li><a href="#">土:未释放</a></li>
+        <li><a href="#" style="color:red">燃烧:未释放</a></li>
+        <li><a href="#" style="color:red">传送:未释放</a></li>
+        <li><a href="#">束缚:未释放</a></li>
+        <li><a href="#">燃烧:未释放</a></li>
+        <li><a href="#">传送:未释放</a></li>
     </ul>
 </div>
 <script src="./static/plugins/js/circleIndex.js"></script>
@@ -340,6 +307,7 @@
             chessIsBegin = 1;
             //初始化对方棋子
             initOtherChess();
+            chessRemindMes("开始游戏");
         }
         //收到对方走步
         if (message.type === 1) {
@@ -355,6 +323,7 @@
             }
             //更新步数
             myStep = message.step;
+            chessRemindMes("我方回合");
         }
         //收到对方胜利
         if (message.type === 2) {
