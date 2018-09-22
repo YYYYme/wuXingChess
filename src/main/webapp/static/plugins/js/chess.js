@@ -615,8 +615,8 @@ function chessJudgeBetween(firstPoint, point) {
 function chessIsSkill() {
     if (chessSkillm !== 1) {
         if (chessFirstClass === "mu" || chessFirstClass === "mu0") {
-            //周围一圈是否有我方棋子
-            if (chessExistClassAround(firstPoint.x, firstPoint.y, true)) {
+            //周围一圈是否有对方棋子
+            if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
                 chessSkillLight();
                 //技能重命名
                 chessSkillRename("束缚");
@@ -637,8 +637,8 @@ function chessIsSkill() {
     }
     if (chessSkillt !== 1) {
         if (chessFirstClass === "tu" || chessFirstClass === "tu0") {
-            //周围一圈是否有对方棋子
-            if (chessExistClassAround(firstPoint.x, firstPoint.y, false)) {
+            //周围一圈是否有我方棋子
+            if (chessExistClassAround(firstPoint.x, firstPoint.y, true)) {
                 chessSkillLight();
                 //技能重命名
                 chessSkillRename("传送");
@@ -740,8 +740,6 @@ function chessExistClassAround(x, y, myClass) {
         if (cl) {
             if (!chessJudgeIsBoss(cl)) {
                 if (chessJudgeMyChess(cl) === myClass) {
-                    return true;
-                } else {
                     return true;
                 }
             }
