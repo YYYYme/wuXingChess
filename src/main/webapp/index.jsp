@@ -271,13 +271,13 @@
 
 <div style="text-align:center;clear:both">
 </div>
-<div class="radmenu"><a href="#" class="show" style="color:red">束缚:未释放</a>
+<div class="radmenu"><a href="#" id="red_mu" class="show" style="color:red">束缚:未释放</a>
     <ul>
-        <li><a href="#" style="color:red">燃烧:未释放</a></li>
-        <li><a href="#" style="color:red">传送:未释放</a></li>
-        <li><a href="#">束缚:未释放</a></li>
-        <li><a href="#">燃烧:未释放</a></li>
-        <li><a href="#">传送:未释放</a></li>
+        <li><a href="#" id="red_huo" style="color:red">燃烧:未释放</a></li>
+        <li><a href="#" id="red_tu" style="color:red">传送:未释放</a></li>
+        <li><a href="#"id="black_mu" >束缚:未释放</a></li>
+        <li><a href="#"id="black_huo" >燃烧:未释放</a></li>
+        <li><a href="#"id="black_tu" >传送:未释放</a></li>
     </ul>
 </div>
 <script src="./static/plugins/js/circleIndex.js"></script>
@@ -390,8 +390,6 @@
                         chessAlertError("此子已被对方束缚");
                         return;
                     }
-                    //技能是否亮起
-                    chessIsSkill();
                 } else {
                     return;
                 }
@@ -402,6 +400,8 @@
             chessPutFirstPoint(point, firstClass);
             //加入第一点击点样式
             chessAddCssForFirst(point[0], point[1]);
+            //技能是否亮起
+            chessIsSkill();
             //重走亮起
             chessResetLight();
             return;
