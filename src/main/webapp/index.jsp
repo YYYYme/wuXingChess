@@ -88,7 +88,7 @@
         }
 
         .back {
-            margin: 0 0 0 -450px;
+            margin: 0 0 0 -200px ;
             text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
             /*background-attachment: fixed;*/
@@ -98,13 +98,16 @@
 
         }
 
-        .remind-mes {
+        .remind-mes ,fade_div {
             text-align: center;
             display: block;
             margin: 0 auto;
         }
         .remind-div{
             padding: 10px 0px;
+        }
+        .fade_div{
+            display: none;
         }
     </style>
 </head>
@@ -224,6 +227,7 @@
     <div class="row-line">
         <span id="0_-6" class="squ-line"></span>
     </div>
+    <div id="fade_div" class="btn-medium fade_div cancel"></div>
 </div>
 <%--<input type="button" id="chessMeStop" class="walk" value="走" disabled="disabled"
        onclick="chessMeStop()"/>
@@ -270,15 +274,13 @@
     </div>
 </div>
 
-<div style="text-align:center;clear:both">
-</div>
 <div class="radmenu"><a href="#" id="red_mu" class="show" style="color:red">束缚:未释放</a>
     <ul>
         <li><a href="#" id="red_huo" style="color:red">燃烧:未释放</a></li>
         <li><a href="#" id="red_tu" style="color:red">传送:未释放</a></li>
-        <li><a href="#"id="black_mu" >束缚:未释放</a></li>
-        <li><a href="#"id="black_huo" >燃烧:未释放</a></li>
-        <li><a href="#"id="black_tu" >传送:未释放</a></li>
+        <li><a href="#" id="black_mu" >束缚:未释放</a></li>
+        <li><a href="#" id="black_huo" >燃烧:未释放</a></li>
+        <li><a href="#" id="black_tu" >传送:未释放</a></li>
     </ul>
 </div>
 <script src="./static/plugins/js/circleIndex.js"></script>
@@ -369,7 +371,7 @@
             return;
         }
         if (myStep % 2 !== 1) {
-            chessAlertError("未到我方走");
+            chessAlertError("当前不可走");
             return;
         }
         //获取点击点id,class
