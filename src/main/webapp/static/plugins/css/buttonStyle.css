@@ -2,17 +2,18 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font: bold 14px Arial, sans-serif;
 }
 
 /* So the background is not so plain */
+/*
 html {
     height: 100%;
     background: white;
     background: radial-gradient(circle, #fff 20%, #ccc);
     background-size: cover;
 }
+*/
 
 .container {
     top: 350px;

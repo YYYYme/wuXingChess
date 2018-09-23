@@ -91,7 +91,8 @@
         var $restart = $("<a>").addClass("sgBtn").addClass("ok").text("重新开始");//重新开始按钮
         var $out = $("<a>").addClass("sgBtn").addClass("cancel").text("退出房间");//退出按钮
         var $input = $("<input>").addClass("inputBox");//输入框
-        var $clsBtn = $("<a>").addClass("clsBtn");//关闭按钮
+        var $clsBtn = $("<a>").addClass("");//关闭按钮
+        //var $clsBtn = $("<a>").addClass("clsBtn");//关闭按钮
 
         //建立按钮映射关系
         var btns = {
@@ -148,7 +149,7 @@
             //点击关闭按钮
             $clsBtn.click(doClose);
 
-            //点击重新开始按钮
+            //点击重新开始按钮var $clsBtn = $("<a>").add
             $restart.click(doRestart);
 
             //点击退出房间按钮

@@ -15,8 +15,8 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             display: inline-block;
-            /*background-color: rgb(209,169,118);*/
             background-color: rgb(209, 169, 90);
+            box-sizing: border-box;
         }
 
         .diamond {
@@ -88,13 +88,14 @@
         }
 
         .back {
-            margin: 0px;
+            margin: 0 0 0 -450px;
             text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
             /*background-attachment: fixed;*/
             background-size: cover;
             width: 100%;
             height: 100%;
+
         }
 
         .remind-mes {
