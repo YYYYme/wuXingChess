@@ -79,12 +79,12 @@
         }
 
         .squ-line, .jin, .jin0, .mu, .mu0, .shui, .shui0, .huo, .huo0, .tu, .tu0, .shuai, .shuai0 {
-            width: 60px;
-            height: 60px;
+            width: 57px;
+            height: 57px;
         }
 
         .jin, .jin0, .mu, .mu0, .shui, .shui0, .huo, .huo0, .tu, .tu0, .shuai, .shuai0, .diamond {
-            background-size: 60px;
+            background-size: 57px;
         }
 
         .back {
@@ -98,16 +98,17 @@
 
         }
 
-        .remind-mes ,fade_div {
+        .remind-mes ,.fade_div {
             text-align: center;
             display: block;
             margin: 0 auto;
         }
         .remind-div{
-            padding: 10px 0px;
+            padding: 7px 0px;
         }
         .fade_div{
             display: none;
+            width: 300px;
         }
     </style>
 </head>
