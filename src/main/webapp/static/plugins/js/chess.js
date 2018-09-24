@@ -879,9 +879,6 @@ function chessMeStop() {
     //步数加一
     chessMyStepCount++;
     chessRemindMes("对方回合");
-    //todo
-
-
 }
 
 //组装走步信息
@@ -903,7 +900,7 @@ function chessTraceNoSkill(message) {
     //木释放技能后走动时清空束缚点
     if (message.chessFirstClass === "mu" || message.chessFirstClass === "mu0") {
         if (chessOperateSkillm === 1) {
-            //撤销束缚样式
+            //todo 撤销束缚样式
             var shuFuId = chessShuFuPoint.x + "_" + chessShuFuPoint.y;
 
             chessClearShuFuPoint();
@@ -981,24 +978,30 @@ function chessTraceSkill(message) {
         chessShuFuPoint.y = message.chessShuFuPoint.y;
         //对方木释放状态为已释放
         chessOperateSkillm = 1;
-        //secondId加样式
+        //文字改为已释放
+        chessClassChangeTxt("mu","束缚:已释放" ,2);
+        //todo secondId加样式
 
-        //todo 对方释放技能展示
-
+        //对方释放技能提示
+        chessFadeDiv("对方释放束缚技能");
     } else if (message.chessFirstClass === 'huo' || message.chessFirstClass === 'huo0') {
         //对方放火技能,让两个点消失
         $("#" + firstId).removeClass(message.chessFirstClass);
         $("#" + secondId).removeClass(message.chessSecondClass);
-        //todo 对方释放技能展示
-
+        //对方释放技能展示
+        chessFadeDiv("对方释放燃烧技能");
+        //文字改为已释放
+        chessClassChangeTxt("huo","燃烧:已释放" ,2);
     } else if (message.chessFirstClass === 'tu' || message.chessFirstClass === 'tu0') {
         //删除开始点,描绘结束点
         $("#" + firstId).removeClass(message.chessFirstClass);
         $("#" + secondId).removeClass(message.chessSecondClass);
         $("#" + message.chessFirstTrackX[1] + "_" + message.chessFirstTrackY[1]).addClass(message.chessFirstClass);
         $("#" + message.chessSecondTrackX[1] + "_" + message.chessSecondTrackY[1]).addClass(message.chessSecondClass);
-        //todo 对方释放技能展示
-
+        //对方释放技能展示
+        chessFadeDiv("对方释放传送技能");
+        //文字改为已释放
+        chessClassChangeTxt("tu","传送:已释放" ,2);
     }
 }
 
@@ -1152,7 +1155,7 @@ function chessRegret() {
         return;
     }
     if (chessRegretCount === 1) {
-        window.wxc.xcConfirm("只能悔棋一次", window.wxc.xcConfirm.typeEnum.warning);
+        chessFadeDiv("只能悔棋一次");
         return;
     }
     //发送申请
@@ -1191,8 +1194,21 @@ function chessAgreeRegret() {
     chessCancelLastStep(chessAcceptMessage);
     //提示:对方回合
     chessRemindMes("对方回合");
+    //释放技能则更改文字
+    chessOperateRegretChangeTxt(chessAcceptMessage);
 }
-
+//同意对方悔棋时释放技能更改文字
+function chessOperateRegretChangeTxt(chessAcceptMessage) {
+    if (chessAcceptMessage.isSkill == 1){
+        if (chessAcceptMessage.chessFirstClass === "mu" || chessAcceptMessage.chessFirstClass === "mu0") {
+            chessClassChangeTxt("mu", "束缚:未释放", 2);
+        } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
+            chessClassChangeTxt("huo", "燃烧:未释放", 2);
+        } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
+            chessClassChangeTxt("tu", "传送:未释放", 2);
+        }
+    }
+}
 //对方同意悔棋我方操作
 function chessAcceptAgreeRegret() {
     //判断是否我方操作
@@ -1240,7 +1256,8 @@ function chessAcceptAgreeRegret() {
         }
     }
     //检查对方是否放技能
-    if (chessAcceptMessage.isSkill == 1) {
+    chessOperateRegretChangeTxt(chessAcceptMessage);
+    /*if (chessAcceptMessage.isSkill == 1) {
         if (chessAcceptMessage.chessFirstClass === "mu" || chessAcceptMessage.chessFirstClass === "mu0") {
             chessClassChangeTxt("mu", "束缚:未释放", 2);
         } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
@@ -1248,7 +1265,7 @@ function chessAcceptAgreeRegret() {
         } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
             chessClassChangeTxt("tu", "传送:未释放", 2);
         }
-    }
+    }*/
 }
 
 //撤回之前走的棋子
@@ -1280,59 +1297,68 @@ function chessBackToRoom() {
 
 //查看规则
 function chessWatchRules() {
-    //todo 增大边框
-    var txt = "一步一步走\n" +
-        "不能斜着走\n" +
-        "金:对方棋子相连时可以连续吃\n" +
-        "木:可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消\n" +
-        "火:可以拼掉一排的另一个敌人\n" +
-        "土:可以带着一个人瞬移一次\n" +
-        "火,木,土技能都只能发动一次,且老将免疫攻击\n" +
-        "水可以走两步,只能吃掉一个\n" +
-        "只能悔棋一次";
-    var option = {
-        title: "查看规则",
-        btn: parseInt("0011", 2),
-        onOk: function () {
+    var txt = "一步一步走,不能斜着走" +
+        "金:对方棋子相连时可以连续吃" +
+        "木:可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消" +
+        "火:可以拼掉一排的另一个敌人" +
+        "土:可以带着一个人瞬移一次" +
+        "火,木,土技能都只能发动一次,且老将免疫攻击" +
+        "水可以走两步,只能吃掉一个" +
+        "只能悔棋一次,不管对方是否同意";
+    //页面层-自定义
+    layer.open({
+        type: 1
+        ,title: false //不显示标题栏
+        ,closeBtn: false
+        ,area: '620px;'
+        ,shade: 0.8
+        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+        ,resize: true
+        ,btn: ['确定']
+        ,btnAlign: 'c'
+        ,moveType: 1 //拖拽模式，0或者1
+        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: left;">一步一步走,不能斜着走<br>金 : 对方棋子相连时可以连续吃<br>木 : 可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消<br>水 : 可以走两步,只能吃掉一个<br>火 : 可以拼掉一排的另一个敌人<br>土 : 可以带着一个人瞬移一次<br>技能每局只能发动一次,且老将免疫攻击<br>只能悔棋一次,不管对方是否同意<br></div>'
+        ,success: function(layero){
+            var btn = layero.find('.layui-layer-btn');
+            btn.find('.layui-layer-btn0').attr({
+                href: '#'
+            });
         }
-    }
-    window.wxc.xcConfirm(txt, "custom", option);
+    });
 }
 
 //收到悔棋弹出框
 function chessAlertRegret() {
     var txt = "对方请求悔棋";
-    var option = {
-        title: "",
-        btn: parseInt("0011", 2),
-        onOk: function () {
-            //发送同意悔棋
-            var message = chessAssembleMessage(5);
-            send(message);
-            //同意悔棋操作
-            chessAgreeRegret();
-        },
-        onCancel: function () {
-            //发送拒绝悔棋
-            var message = chessAssembleMessage(6);
-            send(message);
-        }
-    };
-    return window.wxc.xcConfirm(txt, "custom", option);
+    layer.confirm(txt, {
+        closeBtn: 0,
+        btn: ['同意','拒绝'] //按钮
+    }, function(index){
+        layer.close(index);
+        //发送同意悔棋
+        var message = chessAssembleMessage(5);
+        send(message);
+        //同意悔棋操作
+        chessAgreeRegret();
+    }, function(index){
+        layer.close(index);
+        //发送拒绝悔棋
+        var message = chessAssembleMessage(6);
+        send(message);
+    });
     chessSetTime(txt);
 }
 
 //倒计时
 var chessCountDown = 5;
-
 function chessSetTime(txt) {
     if (chessCountDown === 0) {
         //关闭弹出框
-        $(".out").trigger("click");
+        $(".layui-layer-btn1").trigger("click");
         chessCountDown = 5;
     } else {
         chessCountDown--;
-        $('.txtBox').html(txt + chessCountDown);
+        $('.layui-layer-content').html(txt + chessCountDown);
         setTimeout(function () {
             chessSetTime(txt)
         }, 1000)
@@ -1341,22 +1367,22 @@ function chessSetTime(txt) {
 
 //弹出信息框,只有确定按钮
 function chessAlertMessage(txt) {
-    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.info);
+    layer.alert(txt, {
+        skin: 'layui-layer-lan'
+        ,closeBtn: 0
+        ,anim: 4 //动画类型
+    });
 }
 
 //结束提示框,按钮:重新开始,退出房间
 function chessAlertEndMessage(txt) {
-    var option = {
-        title: "",
-        btn: parseInt("0100", 2),
-        onRestart: function () {
-            location.reload();
-        },
-        onOut: function () {
-            window.self.location = "room.jsp";
-        }
-    };
-    window.wxc.xcConfirm(txt, "restartout", option);
+    layer.confirm(txt, {
+        btn: ['重新开始','退出房间'] //按钮
+    }, function(){
+        location.reload();
+    }, function(){
+        window.self.location = "room.jsp";
+    });
 }
 
 //更改顶部提示文字
@@ -1366,16 +1392,18 @@ function chessRemindMes(mes) {
 
 //求和
 function chessPeace() {
-    alert("不想做这个功能");
+    layer.alert("不想做这个功能");
 }
 
 //错误弹框
 function chessAlertError(txt) {
-    window.wxc.xcConfirm(txt, window.wxc.xcConfirm.typeEnum.error);
+    layer.alert(txt, {
+        icon: 2
+    })
 }
 //提示框淡入淡出
 function chessFadeDiv(txt) {
-    $("#fade_div").text(txt);
-    $("#fade_div").fadeIn();
-    $("#fade_div").fadeOut(3000);
+    layer.msg(txt, {
+        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+    });
 }

@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="./static/plugins/css/buttonStyle.css" media="screen" type="text/css"/>
     <link rel="stylesheet" href="./static/plugins/css/circleReset.css">
     <link rel="stylesheet" href="./static/plugins/css/circleStyle.css" media="screen" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="./static/plugins/css/xcConfirm.css"/>
-    <script src="./static/plugins/js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./static/plugins/layer-v3.1.1/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+
     <style>
         .squ-line {
             border: 1px solid #ddd;
@@ -79,17 +79,16 @@
         }
 
         .squ-line, .jin, .jin0, .mu, .mu0, .shui, .shui0, .huo, .huo0, .tu, .tu0, .shuai, .shuai0 {
-            width: 57px;
-            height: 57px;
+            width: 60px;
+            height: 60px;
         }
 
         .jin, .jin0, .mu, .mu0, .shui, .shui0, .huo, .huo0, .tu, .tu0, .shuai, .shuai0, .diamond {
-            background-size: 57px;
+            background-size: 60px;
         }
 
         .back {
             margin: 0 0 0 -200px ;
-            text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
             /*background-attachment: fixed;*/
             background-size: cover;
@@ -104,11 +103,14 @@
             margin: 0 auto;
         }
         .remind-div{
-            padding: 7px 0px;
+            padding: 10px 0px;
         }
         .fade_div{
             display: none;
             width: 300px;
+        }
+        .chess_board{
+            text-align: center;
         }
     </style>
 </head>
@@ -116,7 +118,7 @@
 <div class="remind-div">
     <p id="remindMes" class="btn-medium cancel remind-mes">等待开始</p>
 </div>
-<div id="chessBoard">
+<div id="chessBoard" class="chess_board">
     <div class="row-line">
         <span id="0_6" class="squ-line"></span>
     </div>
@@ -300,8 +302,9 @@
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/websocket?roomName=" + roomName + "&color=" + myColor);
-        //初始化我放位置
+        websocket = new WebSocket("ws://118.24.114.116:80/websocket?roomName=" + roomName + "&color=" + myColor);
+        //websocket = new WebSocket("ws://localhost:8080/websocket?roomName=" + roomName + "&color=" + myColor);
+        //初始化我方位置
         init();
     }
     else {
@@ -311,7 +314,6 @@
     //接收到消息的回调方法
     websocket.onmessage = function (event) {
         var message = eval('(' + event.data + ')');
-        console.log(message);
         //开始游戏
         if (message.type === 0) {
             chessIsBegin = 1;

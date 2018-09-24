@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="./static/plugins/css/buttonStyle.css" media="screen" type="text/css"/>
     <style>
         .back {
-            width:100%;
-            height:100%;
+            width: 100%;
+            height: 100%;
             margin: 0px;
             text-align: center;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
@@ -22,8 +22,8 @@
             background-attachment: fixed;
         }
 
-        .room{
-            margin:auto;
+        .room {
+            margin: auto;
             position: absolute;
             width: 50%;
             height: 30%;
@@ -37,9 +37,9 @@
 <body class="back">
 <div class="room">
     <% for (RoomDTO roomDTO : WebSocket.getRoomList()) {%>
-        <%--<input type="button" class="btn btn-room info pos" onclick="joinRoom(<%= roomDTO.getName()%>)"
-               value="加入房间<%= roomDTO.getName()%>"/>--%>
-        <span class="btn btn-room cancel" onclick="joinRoom(<%= roomDTO.getName()%>)">加入房间<%= roomDTO.getName()%></span>
+    <%--<input type="button" class="btn btn-room info pos" onclick="joinRoom(<%= roomDTO.getName()%>)"
+           value="加入房间<%= roomDTO.getName()%>"/>--%>
+    <span class="btn btn-room cancel" onclick="joinRoom(<%= roomDTO.getName()%>)">加入房间<%= roomDTO.getName()%></span>
     <%}%>
 </div>
 </body>
@@ -59,8 +59,8 @@
         }
         //未满员
         //跳转页面,将颜色和步骤传入跳转页面,第一个为红方,第二个黑方
-        window.self.location = "index.jsp?desc=" + desc + "&roomName=" + roomName;
-        //location.href = "index.jsp?desc="+desc+ "&roomName=" + roomName;
+        //window.self.location = "index.jsp?desc=" + desc + "&roomName=" + roomName;
+        location.href = "index.jsp?desc=1&roomName=" + roomName;
     }
 
     function judgeRoomFull(roomName) {
