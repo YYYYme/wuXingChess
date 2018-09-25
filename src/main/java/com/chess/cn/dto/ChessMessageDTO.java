@@ -18,6 +18,9 @@ public class ChessMessageDTO {
     private String chessSecondClass;
     private List<Integer> chessSecondTrackX;
     private List<Integer> chessSecondTrackY;
+    private List<String> chessDeleteClass;
+    private List<Integer> chessDeleteTrackX;
+    private List<Integer> chessDeleteTrackY;
     /**
      * 束缚点
      */
@@ -28,6 +31,30 @@ public class ChessMessageDTO {
      * 0:开始游戏
      */
     private Integer type;
+
+    public List<String> getChessDeleteClass() {
+        return chessDeleteClass;
+    }
+
+    public void setChessDeleteClass(List<String> chessDeleteClass) {
+        this.chessDeleteClass = chessDeleteClass;
+    }
+
+    public List<Integer> getChessDeleteTrackX() {
+        return chessDeleteTrackX;
+    }
+
+    public void setChessDeleteTrackX(List<Integer> chessDeleteTrackX) {
+        this.chessDeleteTrackX = chessDeleteTrackX;
+    }
+
+    public List<Integer> getChessDeleteTrackY() {
+        return chessDeleteTrackY;
+    }
+
+    public void setChessDeleteTrackY(List<Integer> chessDeleteTrackY) {
+        this.chessDeleteTrackY = chessDeleteTrackY;
+    }
 
     public ChessPointDTO getChessShuFuPoint() {
         return chessShuFuPoint;
