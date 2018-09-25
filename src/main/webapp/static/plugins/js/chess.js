@@ -694,8 +694,8 @@ function chessSkillRename(name) {
 
 //横向或纵向最近处是否有可燃烧的对方棋子
 function chessHaveCanBornClass() {
-    var x = firstPoint.x;
-    var y = firstPoint.y;
+    var x = parseInt(firstPoint.x);
+    var y = parseInt(firstPoint.y);
     //横向
     for (var i = x + 1; i < x + 10; i++) {
         var id = i + "_" + y;
@@ -1158,6 +1158,7 @@ function chessRegret() {
         chessFadeDiv("只能悔棋一次");
         return;
     }
+    chessFadeDiv("已发出悔棋请求,请等待");
     //发送申请
     var message = chessAssembleMessage(4);
     send(message);
@@ -1317,7 +1318,7 @@ function chessWatchRules() {
         ,btn: ['确定']
         ,btnAlign: 'c'
         ,moveType: 1 //拖拽模式，0或者1
-        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: left;">一步一步走,不能斜着走<br>金 : 对方棋子相连时可以连续吃<br>木 : 可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消<br>水 : 可以走两步,只能吃掉一个<br>火 : 可以拼掉一排的另一个敌人<br>土 : 可以带着一个人瞬移一次<br>技能每局只能发动一次,且老将免疫攻击<br>只能悔棋一次,不管对方是否同意<br></div>'
+        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;text-align: left;">一次走一步,不能斜着走<br>走完请点击(走)按钮,点击走之前可点击(重走)按钮重新规划路线<br>吃掉对方将,或者我方将走到钻石处获胜<br>金 : 对方棋子相连时可以连续吃<br>木 : 可以束缚一圈以内的一个对方棋子双方都不能动,当木走动时束缚取消<br>水 : 可以走两步,但只能吃掉一个<br>火 : 可以拼掉横排或竖排的另一个敌人(中间不能有棋子或钻石等障碍)<br>土 : 可以带着周围一圈我方棋子瞬移一次<br>技能每局只能发动一次,且老将免疫攻击<br>技能释放顺序:先点击第一个棋子,再点击(技能)按钮,最后点击被技能作用的棋子<br>只能悔棋一次,不管对方是否同意<br></div>'
         ,success: function(layero){
             var btn = layero.find('.layui-layer-btn');
             btn.find('.layui-layer-btn0').attr({

@@ -59,14 +59,14 @@
         }
         //未满员
         //跳转页面,将颜色和步骤传入跳转页面,第一个为红方,第二个黑方
-        //window.self.location = "index.jsp?desc=" + desc + "&roomName=" + roomName;
-        location.href = "index.jsp?desc=1&roomName=" + roomName;
+        window.self.location = "index.jsp?desc=" + desc + "&roomName=" + roomName;
     }
 
     function judgeRoomFull(roomName) {
-        var result;
+        var result = '';
         $.ajax({
-            url: "/servlet/AjaxServlet",//要请求的服务器url
+            url: "chess/servlet/AjaxServlet",//服务器 要请求的服务器url
+            //url: "servlet/AjaxServlet",//idea 本地 要请求的服务器url
             //这是一个对象，表示请求的参数，两个参数：method=ajax&val=xxx，服务器可以通过request.getParameter()来获取
             //data:{method:"ajaxTest",val:value},
             data: {roomName: roomName},  //这里的email对应表单中的name="email"，也是发送url中的email=value(GET方式)

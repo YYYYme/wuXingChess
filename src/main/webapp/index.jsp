@@ -88,7 +88,7 @@
         }
 
         .back {
-            margin: 0 0 0 -200px ;
+            margin: 0 0 0 -200px;
             background: url(./static/plugins/images/bgpic2.jpg) no-repeat;
             /*background-attachment: fixed;*/
             background-size: cover;
@@ -97,20 +97,27 @@
 
         }
 
-        .remind-mes ,.fade_div {
+        .remind-mes, .fade_div {
             text-align: center;
             display: block;
             margin: 0 auto;
         }
-        .remind-div{
+
+        .remind-div {
             padding: 10px 0px;
         }
-        .fade_div{
+
+        .fade_div {
             display: none;
             width: 300px;
         }
-        .chess_board{
+
+        .chess_board {
             text-align: center;
+        }
+
+        input[disabled] {
+            opacity: 0.2
         }
     </style>
 </head>
@@ -281,9 +288,9 @@
     <ul>
         <li><a href="#" id="red_huo" style="color:red">燃烧:未释放</a></li>
         <li><a href="#" id="red_tu" style="color:red">传送:未释放</a></li>
-        <li><a href="#" id="black_mu" >束缚:未释放</a></li>
-        <li><a href="#" id="black_huo" >燃烧:未释放</a></li>
-        <li><a href="#" id="black_tu" >传送:未释放</a></li>
+        <li><a href="#" id="black_mu">束缚:未释放</a></li>
+        <li><a href="#" id="black_huo">燃烧:未释放</a></li>
+        <li><a href="#" id="black_tu">传送:未释放</a></li>
     </ul>
 </div>
 <script src="./static/plugins/js/circleIndex.js"></script>
@@ -302,8 +309,8 @@
     var websocket = null;
     //判断当前浏览器是否支持WebSocket
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://118.24.114.116:80/websocket?roomName=" + roomName + "&color=" + myColor);
-        //websocket = new WebSocket("ws://localhost:8080/websocket?roomName=" + roomName + "&color=" + myColor);
+        websocket = new WebSocket("ws://118.24.114.116:8080/chess/websocket?roomName=" + roomName + "&color=" + myColor);
+        //websocket = new WebSocket("ws://localhost:8080/chess/websocket?roomName=" + roomName + "&color=" + myColor);
         //初始化我方位置
         init();
     }
