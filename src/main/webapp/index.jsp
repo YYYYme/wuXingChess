@@ -326,7 +326,11 @@
             chessIsBegin = 1;
             //初始化对方棋子
             initOtherChess();
-            chessRemindMes("开始游戏");
+            if (myColor == 1){
+                chessRemindMes("我方回合");
+            } else {
+                chessRemindMes("对方回合");
+            }
         }
         //收到对方走步
         if (message.type === 1) {
