@@ -45,8 +45,6 @@
 </body>
 
 <script type="text/javascript">
-    console.log("1");
-
     //加入房间
     function joinRoom(roomName) {
         //判断房间是否满员
@@ -65,7 +63,7 @@
     function judgeRoomFull(roomName) {
         var result = '';
         $.ajax({
-            url: "chess/servlet/AjaxServlet",//服务器 要请求的服务器url
+            url: "servlet/AjaxServlet",//服务器 要请求的服务器url
             //url: "servlet/AjaxServlet",//idea 本地 要请求的服务器url
             //这是一个对象，表示请求的参数，两个参数：method=ajax&val=xxx，服务器可以通过request.getParameter()来获取
             //data:{method:"ajaxTest",val:value},

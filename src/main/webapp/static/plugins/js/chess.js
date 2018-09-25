@@ -383,6 +383,7 @@ function chessJudgeMyChess(cl) {
             }
         }
     }
+    return false;
 }
 
 //填充释放技能后的棋子位置

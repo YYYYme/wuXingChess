@@ -375,7 +375,6 @@
 
     //点击格子时触发
     $('.squ-line').click(function (e) {
-        console.log(e);
         if (chessIsBegin === 0) {
             chessAlertError("没有对手加入房间");
             return;
