@@ -247,7 +247,7 @@ function chessNoSkillCanMove(point, pointIsOther) {
         chessAssembleMessage(chessType);
         //初始化
         chessType = 1;
-        alert("你赢了");
+        chessRemindMes("你赢了");
         return;
     }
     //是否非帅走的中心
