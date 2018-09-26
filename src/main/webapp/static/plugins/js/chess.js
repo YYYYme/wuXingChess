@@ -880,6 +880,8 @@ function chessMeStop() {
     //步数加一
     chessMyStepCount++;
     chessRemindMes("对方回合");
+    //技能变暗
+    chessSkillDark();
 }
 
 //组装走步信息
