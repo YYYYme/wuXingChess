@@ -243,10 +243,10 @@ function chessRemoveOtherClass(id) {
 function chessNoSkillCanMove(point, pointIsOther) {
     //是否获胜
     if (chessWin(point)) {
-        chessType = 2;
-        chessAssembleMessage(chessType);
+        //chessType = 2;
+        //chessAssembleMessage(chessType);
         //初始化
-        chessType = 1;
+        //chessType = 1;
         chessRemindMes("你赢了");
         return;
     }
@@ -640,7 +640,7 @@ function chessJudgeBetween(firstPoint, point) {
             m2 = parseInt(firstPoint.x);
         }
         for (var i = m1 + 1; i < m2; i++) {
-            var id = i + "_" + firstPoint;
+            var id = i + "_" + firstPoint.y;
             var cl = chessJudgePointById(id);
             if (cl) {
                 return false;
@@ -1032,7 +1032,7 @@ function chessRemoveCssForFirst(x, y) {
 //认输
 function chessFail() {
     chessType = 3;
-    var message = chessAssembleMessage(3);
+    var message = chessAssembleMessage(chessType);
     chessType = 1;
     send(message);
     chessAlertEndMessage("已认输");
@@ -1193,6 +1193,8 @@ function chessAgreeRegret() {
         //撤回我方上次走的棋子
         var sendMessage = eval('(' + chessSendMessage + ')');
         chessCancelLastStep(sendMessage);
+        //我方释放技能则撤回
+        chessCancelMySkill(sendMessage);
     }
     //撤回对方走的棋子
     chessCancelLastStep(chessAcceptMessage);
@@ -1201,6 +1203,21 @@ function chessAgreeRegret() {
     //释放技能则更改文字
     chessOperateRegretChangeTxt(chessAcceptMessage);
 }
+//我方释放技能则撤回
+function chessCancelMySkill(sendMessage){
+    if (sendMessage.isSkill == 1){
+        if (sendMessage.chessFirstClass === "mu" || sendMessage.chessFirstClass === "mu0") {
+            chessSkillm = 0;
+            chessClassChangeTxt("mu", "束缚:未释放", 1);
+        } else if (sendMessage.chessFirstClass === "huo" || sendMessage.chessFirstClass === "huo0") {
+            chessSkillh = 0;
+            chessClassChangeTxt("huo", "燃烧:未释放", 1);
+        } else if (sendMessage.chessFirstClass === "tu" || sendMessage.chessFirstClass === "tu0") {
+            chessSkillt = 0;
+            chessClassChangeTxt("tu", "传送:未释放", 1);
+        }
+    }
+}
 //同意对方悔棋时释放技能更改文字
 function chessOperateRegretChangeTxt(chessAcceptMessage) {
     if (chessAcceptMessage.isSkill == 1){
@@ -1208,7 +1225,7 @@ function chessOperateRegretChangeTxt(chessAcceptMessage) {
             chessClassChangeTxt("mu", "束缚:未释放", 2);
         } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
             chessClassChangeTxt("huo", "燃烧:未释放", 2);
-        } else if (chessAcceptMessage.chessFirstClass === "huo" || chessAcceptMessage.chessFirstClass === "huo0") {
+        } else if (chessAcceptMessage.chessFirstClass === "tu" || chessAcceptMessage.chessFirstClass === "tu0") {
             chessClassChangeTxt("tu", "传送:未释放", 2);
         }
     }
