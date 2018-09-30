@@ -436,6 +436,8 @@
                             //点击点已被束缚
                             if (point[0] == chessShuFuPoint.x && point[1] == chessShuFuPoint.y) {
                                 chessAlertError("此子已被对方束缚");
+                                //清空第一点
+                                chessClearFirstPoint();
                                 return;
                             }
                             //取消上个点击点样式
