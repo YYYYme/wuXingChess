@@ -250,12 +250,13 @@ function chessRemoveOtherClass(id) {
 function chessNoSkillCanMove(point, pointIsOther) {
     //是否获胜
     if (chessWin(point)) {
+        chessIsWin = 1;
         //chessType = 2;
         //chessAssembleMessage(chessType);
         //初始化
         //chessType = 1;
-        chessFadeDiv("你赢了");
-        return;
+        //chessFadeDiv("你赢了");
+        //return;
     }
     //是否非帅走的中心
     if (chessJudgeIsInDiamond(point[0], point[1])) {
