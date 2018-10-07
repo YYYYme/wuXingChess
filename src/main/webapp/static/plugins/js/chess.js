@@ -284,6 +284,7 @@ function chessNoSkillCanMove(point, pointIsOther) {
             }
         }
     }
+    //只走一步
     var xMove = Math.abs(parseInt(point[0]) - parseInt(chessFirstTrackX[chessFirstTrackX.length - 1]));
     var yMove = Math.abs(parseInt(point[1]) - parseInt(chessFirstTrackY[chessFirstTrackY.length - 1]));
     if (xMove <= 1 && yMove <= 1 && xMove != yMove) {
@@ -296,17 +297,17 @@ function chessNoSkillCanMove(point, pointIsOther) {
 function chessWin(point) {
     if (point[0] == 0 && point[1] == 0 && (chessFirstClass === "shuai" || chessFirstClass === "shuai0")) {
         //保存轨迹
-        chessPutFirstTracePoint(point);
+        //chessPutFirstTracePoint(point);
         //获胜
-        chessIsWin = 1;
+        //chessIsWin = 1;
         return true;
     }
     var cl = chessJudgePointById(point[0] + "_" + point[1]);
     if (cl === "shuai" || cl === "shuai0") {
         //保存轨迹
-        chessPutFirstTracePoint(point);
+        //chessPutFirstTracePoint(point);
         //获胜
-        chessIsWin = 1;
+        //chessIsWin = 1;
         return true;
     }
     return false;
@@ -723,7 +724,7 @@ function chessHaveCanBornClass() {
                 if (!chessJudgeMyChess(cl)) {
                     return true;
                 } else {
-                    return false;
+                    break;
                 }
             } else {
                 return false;
@@ -738,10 +739,10 @@ function chessHaveCanBornClass() {
                 if (!chessJudgeMyChess(cl)) {
                     return true;
                 } else {
-                    return false;
+                    break;
                 }
             } else {
-                return false;
+                break;
             }
         }
     }
@@ -754,10 +755,10 @@ function chessHaveCanBornClass() {
                 if (!chessJudgeMyChess(clZong)) {
                     return true;
                 } else {
-                    return false;
+                    break;
                 }
             } else {
-                return false;
+                break;
             }
         }
     }
@@ -769,10 +770,10 @@ function chessHaveCanBornClass() {
                 if (!chessJudgeMyChess(clZong)) {
                     return true;
                 } else {
-                    return false;
+                    break;
                 }
             } else {
-                return false;
+                break;
             }
         }
     }
@@ -897,6 +898,8 @@ function chessMeStop() {
     //步数加一
     chessMyStepCount++;
     chessRemindMes("对方回合");
+    //对方回合
+    myStep = 0;
     //技能变暗
     chessSkillDark();
     //删除点清空
@@ -911,7 +914,7 @@ function chessMeStop() {
 
 //组装走步信息
 function chessAssembleMessage(type) {
-    var message = '{type:' + type + ',step:' + (myStep + 1) + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '",chessShuFuPoint:{x:' + chessShuFuPoint.x + ',y:' + chessShuFuPoint.y + '},chessDeleteClass:[' + chessDeleteClass + '],chessDeleteTrackX:[' + chessDeleteTrackX + '],chessDeleteTrackY:[' + chessDeleteTrackY + ']}';
+    var message = '{type:' + type + ',step:' + 1 + ',isSkill:"' + isSkill + '",chessRoom:"' + chessMyRoom + '",color:"' + myColor + '",chessFirstPoint:{x:' + firstPoint.x + ',y:' + firstPoint.y + '},chessFirstClass:"' + chessFirstClass + '",chessSecondPoint:{x:' + chessSecondPoint.x + ',y:' + chessSecondPoint.y + '},chessFirstTrackX:[' + chessFirstTrackX + '],chessFirstTrackY:[' + chessFirstTrackY + '],chessSecondTrackX:[' + chessSecondTrackX + '],chessSecondTrackY:[' + chessSecondTrackY + '],chessSecondClass:"' + chessSecondClass + '",chessShuFuPoint:{x:' + chessShuFuPoint.x + ',y:' + chessShuFuPoint.y + '},chessDeleteClass:[' + chessDeleteClass + '],chessDeleteTrackX:[' + chessDeleteTrackX + '],chessDeleteTrackY:[' + chessDeleteTrackY + ']}';
     return message;
 }
 
